@@ -1,0 +1,402 @@
+object frmSelImp: TfrmSelImp
+  Left = 249
+  Top = 137
+  Width = 472
+  Height = 380
+  AutoSize = True
+  BorderIcons = [biMaximize]
+  Caption = 'Sele'#231#227'o de Impre'#231#227'o'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 464
+    Height = 346
+    Align = alClient
+    TabOrder = 0
+    object Bevel1: TBevel
+      Left = 8
+      Top = 288
+      Width = 449
+      Height = 9
+      Shape = bsBottomLine
+    end
+    object GroupBox2: TGroupBox
+      Left = 8
+      Top = 96
+      Width = 185
+      Height = 73
+      Caption = 'Per'#237'odo Inicial'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object DataInicial1: TEvDateEdit
+        Left = 24
+        Top = 32
+        Width = 137
+        Height = 26
+        Alignment = taCenter
+        DateText = '00/00/0000'
+        DateValue = -693594.000000000000000000
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Glyph.Data = {
+          E6020000424DE60200000000000042000000280000001A0000000D0000000100
+          100003000000A402000000000000000000000000000000000000007C0000E003
+          00001F0000001F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+          1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C553E343A
+          1336F231D12DB0298F256E214D1D2C192C191F7C1F7C9452734E524A31461042
+          1042EF3DCE39AD358C316B2D1F7C1F7C7642FA52363AFC52563AFC52363AFA52
+          363ABA4A2C191F7C1F7CB5561863734E1863734E1863734E1863734ED65A8C31
+          1F7C1F7C7642FF7FBA4AFF7F9A42FF7B9A42BF739A429F6B4D1D1F7C1F7CB556
+          FF7FD65AFF7FB556FF7FB556BD77B5569C73AD351F7C1F7C9746DA4A363A9A42
+          363A9A420271E270C0589A426E211F7C1F7CD65AF75E734EB556734EB5561042
+          EF3DAD35B556CE391F7C1F7CB84AFF7F9A42FF7F9A42FF7F0C7EFF7FE270BF73
+          8F251F7C1F7CD65AFF7FB556FF7FB556FF7FD65AFF7FEF3DBD77EF3D1F7C1F7C
+          D94EDA4A363A9A42363A9A42707E0C7E02719A42B0291F7C1F7CF75EF75E734E
+          B556734EB5561863D65A1042B55610421F7C1F7CFA52FF7F9A42FF7F9A42FF7F
+          9A42FF7F9A42FF7BD12D1F7C1F7C1863FF7FB556FF7FB556FF7FB556FF7FB556
+          FF7F10421F7C1F7C9D427D425C3A3B3A3B361B321A2EFA29D925B81D98191F7C
+          1F7CD65AB55694529452734E734E524A31461042EF3DEF3D1F7C1F7C9D46BF73
+          BF73BF73BF73BF739E429E429E429E3AB81D1F7C1F7CD65ABD77BD77BD77BD77
+          BD77D65AD65AD65AB556EF3D1F7C1F7CBE4A9D469D427D425C3A3B3A3B361B32
+          1A2EFA29D9251F7C1F7CF75ED65AD65AB55694529452734E734E524A31461042
+          1F7C1F7CFA522925FF7F2925FF7F2925FF7F2925FF7F2925FA521F7C1F7C1863
+          8C31FF7F8C31FF7F8C31FF7F8C31FF7F8C3118631F7C1F7C1F7C1F7C1F7C1F7C
+          1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+          1F7C1F7C1F7C1F7C1F7C}
+        ParentFont = False
+        ShowButton = True
+        TabOrder = 0
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 272
+      Top = 96
+      Width = 185
+      Height = 73
+      Caption = 'Per'#237'odo Final'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+      object DataFinal1: TEvDateEdit
+        Left = 24
+        Top = 32
+        Width = 137
+        Height = 26
+        Alignment = taCenter
+        DateText = '00/00/0000'
+        DateValue = -693594.000000000000000000
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Glyph.Data = {
+          E6020000424DE60200000000000042000000280000001A0000000D0000000100
+          100003000000A402000000000000000000000000000000000000007C0000E003
+          00001F0000001F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+          1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C553E343A
+          1336F231D12DB0298F256E214D1D2C192C191F7C1F7C9452734E524A31461042
+          1042EF3DCE39AD358C316B2D1F7C1F7C7642FA52363AFC52563AFC52363AFA52
+          363ABA4A2C191F7C1F7CB5561863734E1863734E1863734E1863734ED65A8C31
+          1F7C1F7C7642FF7FBA4AFF7F9A42FF7B9A42BF739A429F6B4D1D1F7C1F7CB556
+          FF7FD65AFF7FB556FF7FB556BD77B5569C73AD351F7C1F7C9746DA4A363A9A42
+          363A9A420271E270C0589A426E211F7C1F7CD65AF75E734EB556734EB5561042
+          EF3DAD35B556CE391F7C1F7CB84AFF7F9A42FF7F9A42FF7F0C7EFF7FE270BF73
+          8F251F7C1F7CD65AFF7FB556FF7FB556FF7FD65AFF7FEF3DBD77EF3D1F7C1F7C
+          D94EDA4A363A9A42363A9A42707E0C7E02719A42B0291F7C1F7CF75EF75E734E
+          B556734EB5561863D65A1042B55610421F7C1F7CFA52FF7F9A42FF7F9A42FF7F
+          9A42FF7F9A42FF7BD12D1F7C1F7C1863FF7FB556FF7FB556FF7FB556FF7FB556
+          FF7F10421F7C1F7C9D427D425C3A3B3A3B361B321A2EFA29D925B81D98191F7C
+          1F7CD65AB55694529452734E734E524A31461042EF3DEF3D1F7C1F7C9D46BF73
+          BF73BF73BF73BF739E429E429E429E3AB81D1F7C1F7CD65ABD77BD77BD77BD77
+          BD77D65AD65AD65AB556EF3D1F7C1F7CBE4A9D469D427D425C3A3B3A3B361B32
+          1A2EFA29D9251F7C1F7CF75ED65AD65AB55694529452734E734E524A31461042
+          1F7C1F7CFA522925FF7F2925FF7F2925FF7F2925FF7F2925FA521F7C1F7C1863
+          8C31FF7F8C31FF7F8C31FF7F8C31FF7F8C3118631F7C1F7C1F7C1F7C1F7C1F7C
+          1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C1F7C
+          1F7C1F7C1F7C1F7C1F7C}
+        ParentFont = False
+        ShowButton = True
+        TabOrder = 0
+      end
+    end
+    object BitBtn1: TBitBtn
+      Left = 216
+      Top = 304
+      Width = 80
+      Height = 40
+      Cursor = crHandPoint
+      Hint = 'Vizualiza Relat'#243'rio com os crit'#233'rios informados'
+      Caption = '&Vizualizar'
+      TabOrder = 4
+      TabStop = False
+      OnClick = BitBtn1Click
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333330000000
+        00003333377777777777333330FFFFFFFFF03FF3F7FFFF33FFF7003000000FF0
+        00F077F7777773F77737E00FBFBFB0FFFFF07773333FF7FF33F7E0FBFB00000F
+        F0F077F333777773F737E0BFBFBFBFB0FFF077F3333FFFF733F7E0FBFB00000F
+        F0F077F333777773F737E0BFBFBFBFB0FFF077F33FFFFFF733F7E0FB0000000F
+        F0F077FF777777733737000FB0FFFFFFFFF07773F7F333333337333000FFFFFF
+        FFF0333777F3FFF33FF7333330F000FF0000333337F777337777333330FFFFFF
+        0FF0333337FFFFFF7F37333330CCCCCC0F033333377777777F73333330FFFFFF
+        0033333337FFFFFF773333333000000003333333377777777333}
+      NumGlyphs = 2
+    end
+    object BitBtn2: TBitBtn
+      Left = 296
+      Top = 304
+      Width = 80
+      Height = 40
+      Cursor = crHandPoint
+      Hint = 'Imprime Relat'#243'rio sem vizualizar'
+      Caption = '&Imprimir'
+      TabOrder = 5
+      TabStop = False
+      OnClick = BitBtn2Click
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00300000000000
+        00033FFFFFFFFFFFFFFF0888888888888880777777777777777F088888888888
+        8880777777777777777F0000000000000000FFFFFFFFFFFFFFFF0F8F8F8F8F8F
+        8F80777777777777777F08F8F8F8F8F8F9F0777777777777777F0F8F8F8F8F8F
+        8F807777777777777F7F0000000000000000777777777777777F3330FFFFFFFF
+        03333337F3FFFF3F7F333330F0000F0F03333337F77773737F333330FFFFFFFF
+        03333337F3FF3FFF7F333330F00F000003333337F773777773333330FFFF0FF0
+        33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
+        33333337FFFF7733333333300000033333333337777773333333}
+      NumGlyphs = 2
+    end
+    object BitBtn3: TBitBtn
+      Left = 376
+      Top = 304
+      Width = 80
+      Height = 40
+      Cursor = crHandPoint
+      Hint = 'Fecha formulario'
+      Caption = '&Retornar'
+      TabOrder = 6
+      TabStop = False
+      OnClick = BitBtn3Click
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        33333333333333333333333333333333333333333333333333FF333333333333
+        3000333333FFFFF3F77733333000003000B033333777773777F733330BFBFB00
+        E00033337FFF3377F7773333000FBFB0E000333377733337F7773330FBFBFBF0
+        E00033F7FFFF3337F7773000000FBFB0E000377777733337F7770BFBFBFBFBF0
+        E00073FFFFFFFF37F777300000000FB0E000377777777337F7773333330BFB00
+        000033333373FF77777733333330003333333333333777333333333333333333
+        3333333333333333333333333333333333333333333333333333333333333333
+        3333333333333333333333333333333333333333333333333333}
+      NumGlyphs = 2
+    end
+    object GroupBox4: TGroupBox
+      Left = 272
+      Top = 192
+      Width = 185
+      Height = 89
+      Caption = 'Classifica'#231#227'o dos Registros'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 3
+      object RadioButton1: TRadioButton
+        Left = 8
+        Top = 40
+        Width = 113
+        Height = 17
+        Caption = 'Data de Entrada'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+      end
+      object RadioButton2: TRadioButton
+        Left = 8
+        Top = 64
+        Width = 113
+        Height = 17
+        Caption = 'Ess'#234'ncia'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object RadioButton3: TRadioButton
+        Left = 8
+        Top = 16
+        Width = 113
+        Height = 17
+        Caption = 'Fornecedor'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+      end
+    end
+    object GroupBox5: TGroupBox
+      Left = 8
+      Top = 192
+      Width = 249
+      Height = 89
+      Caption = 'Ess'#234'ncia'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object Essencia: TDBLookupComboBox
+        Left = 16
+        Top = 40
+        Width = 217
+        Height = 26
+        DropDownRows = 10
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Courier New'
+        Font.Style = []
+        KeyField = 'ESSENCIA'
+        ListField = 'ESSENCIA'
+        ListSource = DM.DQEssencia
+        ParentFont = False
+        TabOrder = 0
+      end
+    end
+    object GroupBox1: TGroupBox
+      Left = 8
+      Top = 8
+      Width = 449
+      Height = 73
+      Caption = 
+        'Fornecedor (Pressione a tecla "ALT + P" para pesquisar Fornecedo' +
+        'r)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      object DBLookupComboBox1: TEdit
+        Left = 80
+        Top = 36
+        Width = 361
+        Height = 24
+        CharCase = ecUpperCase
+        Color = clBtnFace
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object Edit1: TEdit
+        Left = 8
+        Top = 36
+        Width = 63
+        Height = 24
+        TabStop = False
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
+      end
+      object BitBtn4: TBitBtn
+        Left = 49
+        Top = 38
+        Width = 20
+        Height = 21
+        Hint = 'Pesquisa Cliente'
+        Caption = '&P'
+        DragCursor = crHandPoint
+        TabOrder = 0
+        OnClick = BitBtn4Click
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+          5555555555555555555555555555555555555555555555555555555555555555
+          555555555555555555555555555555555555555FFFFFFFFFF555550000000000
+          55555577777777775F55500B8B8B8B8B05555775F555555575F550F0B8B8B8B8
+          B05557F75F555555575F50BF0B8B8B8B8B0557F575FFFFFFFF7F50FBF0000000
+          000557F557777777777550BFBFBFBFB0555557F555555557F55550FBFBFBFBF0
+          555557F555555FF7555550BFBFBF00055555575F555577755555550BFBF05555
+          55555575FFF75555555555700007555555555557777555555555555555555555
+          5555555555555555555555555555555555555555555555555555}
+        Margin = 1
+        NumGlyphs = 2
+      end
+    end
+    object DataInicial: TEdit
+      Left = 48
+      Top = 288
+      Width = 121
+      Height = 21
+      TabOrder = 8
+      Visible = False
+    end
+    object DataFinal: TEdit
+      Left = 48
+      Top = 320
+      Width = 121
+      Height = 21
+      TabOrder = 9
+      Visible = False
+    end
+  end
+end

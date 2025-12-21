@@ -1,0 +1,2819 @@
+unit UnitEntradaSerradaProdutos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, EDBNum, DBCtrls, EDBZero, Mask,
+  EDBDate, EDBTime, Grids, DBGrids, ToolEdit, CurrEdit, xCalcltr;
+
+type
+  TfrmEntradaSerradaProdutos = class(TForm)
+    Image1: TImage;
+    Label1: TLabel;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    Panel7: TPanel;
+    Panel8: TPanel;
+    Panel12: TPanel;
+    Panel11: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn3: TBitBtn;
+    EXP: TEvDBNumEdit;
+    VALTOTAL: TEvDBNumEdit;
+    ESSENCIA: TDBLookupComboBox;
+    DBEDIT1: TEvDBZeroEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    SITUACAO: TDBEdit;
+    EDITDATA: TEvDBDateEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    ESSENCIATIPO: TDBLookupComboBox;
+    Panel13: TPanel;
+    DBEdit9: TDBEdit;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel9: TPanel;
+    DBEdit2: TDBEdit;
+    COMP: TEvDBNumEdit;
+    LARG: TEvDBNumEdit;
+    Panel6: TPanel;
+    Panel10: TPanel;
+    VALUNITARIO: TEvDBNumEdit;
+    VALTOTAL1: TEvDBNumEdit;
+    DBEdit10: TDBEdit;
+    quantidade1: TEvDBNumEdit;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    atual: TCurrencyEdit;
+    resultado: TCurrencyEdit;
+    BitBtn2: TBitBtn;
+    Calculator: TCalculator;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit9: TEdit;
+    Edit10: TEdit;
+    Panel14: TPanel;
+    tipo: TComboBox;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
+    Edit11: TEdit;
+    Edit12: TEdit;
+    VALVENDAM3: TEvDBNumEdit;
+    VALVENDA: TEvDBNumEdit;
+    LUCRO: TEvDBNumEdit;
+    QTDEM2: TEvDBNumEdit;
+    QTDEML: TEvDBNumEdit;
+    Edit13: TEdit;
+    Edit14: TEdit;
+    Edit8: TEdit;
+    JG: TBitBtn;
+    M2: TBitBtn;
+    M3: TBitBtn;
+    ML: TBitBtn;
+    mc: TBitBtn;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure EXPExit(Sender: TObject);
+    procedure EvDBNumEdit3Exit(Sender: TObject);
+    procedure ESSENCIAClick(Sender: TObject);
+    procedure ESSENCIAEnter(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ESSENCIATIPOClick(Sender: TObject);
+    procedure DBEdit2Exit(Sender: TObject);
+    procedure ESSENCIATIPOEnter(Sender: TObject);
+    procedure COMPExit(Sender: TObject);
+    procedure LARGExit(Sender: TObject);
+    procedure COMPChange(Sender: TObject);
+    procedure LARGChange(Sender: TObject);
+    procedure EXPChange(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure COMPEnter(Sender: TObject);
+    procedure LARGEnter(Sender: TObject);
+    procedure EXPEnter(Sender: TObject);
+    procedure VALUNITARIOEnter(Sender: TObject);
+    procedure quantidade1Enter(Sender: TObject);
+    procedure tipoChange(Sender: TObject);
+    procedure tipoExit(Sender: TObject);
+    procedure VALVENDAExit(Sender: TObject);
+    procedure VALVENDAM3Enter(Sender: TObject);
+    procedure VALVENDAEnter(Sender: TObject);
+    procedure VALTOTALExit(Sender: TObject);
+    procedure QTDEMLChange(Sender: TObject);
+    procedure QTDEMLExit(Sender: TObject);
+    procedure QTDEM2Change(Sender: TObject);
+    procedure QTDEM2Exit(Sender: TObject);
+    procedure ESSENCIATIPOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ESSENCIAKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure M3Click(Sender: TObject);
+    procedure M2Click(Sender: TObject);
+    procedure MLClick(Sender: TObject);
+    procedure JGClick(Sender: TObject);
+    procedure mcClick(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmEntradaSerradaProdutos: TfrmEntradaSerradaProdutos;
+
+implementation
+
+uses UnitDM, UnitEntradaToros, UnitSaidaMadeiras, UnitEntradaSerrada,
+  UnitPesquisaEntrada, unitentradaserradagauge;
+
+{$R *.dfm}
+
+procedure TfrmEntradaSerradaProdutos.BitBtn3Click(Sender: TObject);
+begin
+DM.TESTOQUE.Filtered := False;
+DM.TESTOQUE.Close;
+DM.TESDISCRIMINACAO.Cancel;
+Close;
+end;
+
+procedure TfrmEntradaSerradaProdutos.BitBtn1Click(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var total, total1, total2, total3, total4, total5, total6 : Real;
+begin
+if tipo.Text  = 'PEÇAS' then
+begin
+	if ESSENCIA.Text='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0,00' then
+   	begin
+         Application.MessageBox('Quantidade de Peças deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+	if COMP.Text='0,00' then
+   	begin
+         Application.MessageBox('Comprimento deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         COMP.SetFocus;
+    end
+    else
+    begin
+	if LARG.Text='0,000' then
+   	begin
+         Application.MessageBox('Largura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         LARG.SetFocus;
+    end
+    else
+    begin
+	if EXP.Text='0,000' then
+   	begin
+         Application.MessageBox('Expessura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         EXP.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+    end
+    else
+    begin
+	if VALVENDA.Text='0,00' then
+   	begin
+ //        Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+ //        VALVENDA.SetFocus;
+    end
+    else
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+if (quantidade1.Text <> '0,00') and(ESSENCIA.Text <> '') and (ESSENCIATIPO.Text <> '') and (COMP.Text <> '0,00') and(LARG.Text <> '0,000') and(EXP.Text <> '0,000')and (VALUNITARIO.Text <> '0,00')and (VALVENDAM3.Text <> '0,00')then//and(VALVENDA.Text <> '0,00') then
+begin
+if dbedit2.Text = '' then
+begin
+dbedit10.Text := '0';
+end
+else
+begin
+if dbedit2.Text <> '' then
+begin
+dbedit10.Text := '1';
+end;
+end;
+
+DM.TESDISCRIMINACAO['QTDEM2'] := '0';
+DM.TESDISCRIMINACAO['QTDEML'] := '0';
+
+DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (DBEDIT5.Text)+ ' and CODIGOPRODUTO = ' + (DBEDIT9.Text) + 'and COMPRIMENTO = ' + (EDIT1.Text)+ 'and LARGURA = ' + (EDIT2.Text)+ 'and EXPESSURA = ' + (EDIT3.Text);
+DM.TESTOQUE.Filtered := True;
+DM.TESTOQUE.Open;
+
+If Application.MessageBox('Confirma Lançamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+edit8.Text := quantidade1.Text ;
+edit9.Text := essencia.Text;
+edit10.Text := essenciatipo.Text;
+edit4.Text := comp.Text;
+edit7.Text := valunitario.Text;
+edit11.Text := VALVENDAM3.Text;
+edit12.Text := VALVENDA.Text;
+
+      if DM.TESTOQUE.RecordCount = 0 then
+      begin
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+
+      DM.TESTOQUE.Append;
+      DM.TESTOQUE['QUANTIDADE']:= quantidade1.Text;
+      DM.TESTOQUE['CODIGOESSENCIA']:= DBEDIT5.Text;
+      DM.TESTOQUE['ESSENCIA']:= ESSENCIA.Text;
+      DM.TESTOQUE['ESSENCIATIPO']:= ESSENCIATIPO.Text;
+      DM.TESTOQUE['CODIGOPRODUTO']:= DBEDIT9.Text;
+      DM.TESTOQUE['COMPRIMENTO']:= COMP.Text;
+      DM.TESTOQUE['LARGURA']:= LARG.Text;
+      DM.TESTOQUE['EXPESSURA']:= EXP.Text;
+      DM.TESTOQUE['TOTALM3']:= VALTOTAL.Value;
+      DM.TESTOQUE['QTDEM2']:= QTDEM2.Value;
+      DM.TESTOQUE['QTDEML']:= QTDEML.Value;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := FALSE;
+      DM.TESTOQUE.Close;
+      DM.TESDISCRIMINACAO.Post;
+      end
+      else
+      begin
+      if DM.TESTOQUE.RecordCount <> 0 then
+      begin
+      DM.TESTOQUE.Edit;
+
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn8:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma4:=0;
+      vsoma5:=0;
+
+      vn1:= quantidade1.Value;
+      vn2:= COMP.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn6:= DM.TESTOQUE['QUANTIDADE'];
+      vn7:= VALTOTAL.Value;
+      vn8:= DM.TESTOQUE['TOTALM3'];
+
+      vsoma := vn1 * vn2 * vn3 * vn4;
+      vsoma1 := vsoma * vn5;
+
+      vsoma4 := DM.TESTOQUE['QUANTIDADE']+ vn1;
+      vsoma3 := vn8+vsoma;
+
+      VALTOTAL.Text := FloatToStr(vsoma);
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+      DM.TESTOQUE['QUANTIDADE']:= FloatToStr(vsoma4);
+      DM.TESTOQUE['TOTALM3']:= (vsoma3);
+
+      DM.TESDISCRIMINACAO.Post;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := false;
+      DM.TESTOQUE.Close;
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+      end;
+      end;
+
+        If Application.MessageBox('Insere Outro Produto para esta Nota Fiscal?', 'Confirmação',
+        mb_YesNo + mb_ICONQUESTION) = idYes then
+        begin
+        DM.TESDISCRIMINACAO.Append;
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        quantidade1.Text := edit8.Text;
+        essencia.KeyValue  := edit9.text;
+        essenciatipo.KeyValue := edit10.text;
+        comp.Text := edit4.Text;
+        valunitario.Text := edit7.Text ;
+        VALVENDAM3.Text := edit11.Text ;
+        VALVENDA.Text := edit12.Text ;
+
+        EDITDATA.Text := frmEntradaSerrada.data.Text;
+        DBEDIT3.Text := frmEntradaSerrada.DBEDit6.Text;
+        DBEDIT4.Text := frmEntradaSerrada.nota.Text;
+        DBEDIT6.Text := frmEntradaSerrada.FORNECEDOR.Text;
+        tipo.SetFocus;
+        end
+        else
+        begin
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        frmentradaserrada.BitBtn115.Enabled := true;
+        close;
+        end;
+end
+else
+tipo.SetFocus;
+end
+end;
+
+procedure TfrmEntradaSerradaProdutos.EXPExit(Sender: TObject);
+begin
+if exp.Text = '' then
+begin
+exit
+end
+else
+begin
+if exp.Text > '0,500' then
+begin
+Application.MessageBox('Expessura informada invalida, Verifique!', 'Lançamento', mb_Ok + mb_IconInformation);
+exp.SetFocus;
+end;
+end;
+
+if (comp.Text <> '0,00') and (larg.Text <> '0,000') and (exp.Text <> '0,000') then
+begin
+valtotal.TabStop := False;
+valtotal.ReadOnly := true;
+end
+else
+begin
+valtotal.TabStop := true;
+valtotal.ReadOnly := false;
+end
+END;
+
+procedure TfrmEntradaSerradaProdutos.EvDBNumEdit3Exit(Sender: TObject);
+begin
+BITBTN1.Click;
+end;
+
+
+procedure TfrmEntradaSerradaProdutos.ESSENCIAClick(Sender: TObject);
+begin
+DBEDIT5.Text := DM.QEssencia['CODIGO'];
+end;
+
+procedure TfrmEntradaSerradaProdutos.ESSENCIAEnter(Sender: TObject);
+begin
+ESSENCIA.DropDown;
+end;
+
+procedure TfrmEntradaSerradaProdutos.FormShow(Sender: TObject);
+begin
+tipo.ItemIndex := 0;
+editdata.Text := frmentradaserrada.data.Text;
+atual.Text := quantidade1.Text;
+tipo.SetFocus;
+with DM.QEssencia do
+  	begin
+               Close;
+               SQL.Clear;
+               SQL.Add('Select * from ESSENCIA Order by ESSENCIA');
+               Open;
+               dm.QEssencia.Last;
+    end;
+
+with DM.QSUBPRODUTOS do
+  	begin
+               Close;
+               SQL.Clear;
+               SQL.Add('Select * from SUBPRODUTO');
+               SQL.Add('Where INATIVO_CODIGO =:codigo');
+               SQL.Add('Order by NOMEGRAU');
+               ParamByName('codigo').Text :='2';
+               Open;
+               dm.QSUBPRODUTOS.Last;
+    end;
+
+
+end;
+
+procedure TfrmEntradaSerradaProdutos.ESSENCIATIPOClick(Sender: TObject);
+begin
+if tipo.ItemIndex = 0 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =1 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+//COMP.Text := '0,00';
+//LARG.Text := '0,000';
+//EXP.Text := '0,000';
+end
+else
+begin
+if tipo.ItemIndex =2 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =3 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+COMP.Text := DM.QSUBPRODUTOS['COMP'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =4 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+COMP.Text := DM.QSUBPRODUTOS['COMP'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =5 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+COMP.Text := DM.QSUBPRODUTOS['COMP'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end;
+end;
+end;
+end;
+end;
+end;
+end;
+
+
+procedure TfrmEntradaSerradaProdutos.DBEdit2Exit(Sender: TObject);
+begin
+if tipo.ItemIndex = 0 then
+begin
+BITBTN1.setfocus;
+end;
+
+if tipo.ItemIndex = 1 then
+begin
+m3.SetFocus ;
+end;
+
+if tipo.ItemIndex = 2 then
+begin
+M2.setfocus;
+end;
+
+if tipo.ItemIndex = 3 then
+begin
+ML.setfocus;
+end;
+
+if tipo.ItemIndex = 4 then
+begin
+JG.setfocus;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.ESSENCIATIPOEnter(Sender: TObject);
+begin
+ESSENCIATIPO.DropDown;
+if tipo.ItemIndex = 0 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =1 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+//COMP.Text := '0,00';
+//LARG.Text := '0,000';
+//EXP.Text := '0,000';
+end
+else
+begin
+if tipo.ItemIndex =2 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =3 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+COMP.Text := DM.QSUBPRODUTOS['COMP'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =4 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+COMP.Text := DM.QSUBPRODUTOS['COMP'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end
+else
+begin
+if tipo.ItemIndex =5 then
+begin
+DBEDIT9.Text := DM.QSUBPRODUTOS['GRAUIND'];
+COMP.Text := DM.QSUBPRODUTOS['COMP'];
+LARG.Text := DM.QSUBPRODUTOS['LARG'];
+EXP.Text := DM.QSUBPRODUTOS['EXP'];
+end;
+end;
+end;
+end;
+end;
+end;
+end;
+
+
+procedure TfrmEntradaSerradaProdutos.COMPExit(Sender: TObject);
+begin
+if COMP.Text = '' then
+begin
+exit
+end
+else
+begin
+if COMP.Text > '9,99' then
+begin
+Application.MessageBox('Comprimento informado invalido, Verifique!', 'Lançamento', mb_Ok + mb_IconInformation);
+comp.SetFocus;
+end
+end
+end;
+
+procedure TfrmEntradaSerradaProdutos.LARGExit(Sender: TObject);
+begin
+if larg.Text = '' then
+begin
+exit
+end
+else
+begin
+if larg.Text > '1,50' then
+begin
+Application.MessageBox('Largura informada invalido, Verifique!', 'Lançamento', mb_Ok + mb_IconInformation);
+larg.SetFocus;
+end
+end
+end;
+
+
+procedure TfrmEntradaSerradaProdutos.COMPChange(Sender: TObject);
+begin
+edit1.Text := comp.Text;
+edit1.Text := StringReplace(edit1.Text, ',', '.', []);
+end;
+
+procedure TfrmEntradaSerradaProdutos.LARGChange(Sender: TObject);
+begin
+edit2.Text := larg.Text;
+edit2.Text := StringReplace(edit2.Text, ',', '.', []);
+end;
+
+procedure TfrmEntradaSerradaProdutos.EXPChange(Sender: TObject);
+begin
+edit3.Text := exp.Text;
+edit3.Text := StringReplace(edit3.Text, ',', '.', []);
+end;
+
+procedure TfrmEntradaSerradaProdutos.BitBtn2Click(Sender: TObject);
+begin
+Calculator.Execute;
+end;
+
+procedure TfrmEntradaSerradaProdutos.FormDestroy(Sender: TObject);
+begin
+  Application.CreateForm(Tfrmentradaserradagauge, frmentradaserradagauge);
+  frmentradaserradagauge.showmodal;
+  frmentradaserradagauge.free;
+end;
+
+procedure TfrmEntradaSerradaProdutos.COMPEnter(Sender: TObject);
+begin
+if edit4.Text = '' then
+begin
+ comp.SelectAll;
+end
+else
+begin
+comp.Text := edit4.Text ;
+comp.SelectAll;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.LARGEnter(Sender: TObject);
+begin
+if edit5.Text = '' then
+begin
+ larg.SelectAll;
+end
+else
+begin
+larg.Text := edit5.Text ;
+larg.SelectAll;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.EXPEnter(Sender: TObject);
+begin
+if edit6.Text = '' then
+begin
+  exp.SelectAll;
+end
+else
+begin
+exp.Text := edit6.Text ;
+exp.SelectAll;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.VALUNITARIOEnter(Sender: TObject);
+begin
+if edit7.Text = '' then
+begin
+valunitario.Text := '0,00';
+valunitario.SelectAll;
+end
+else
+begin
+valunitario.Text := edit7.Text ;
+valunitario.SelectAll;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.quantidade1Enter(Sender: TObject);
+begin
+if edit8.Text = '' then
+begin
+//quantidade1.Text := '0,00';
+quantidade1.SelectAll;
+end
+else
+begin
+quantidade1.Text := edit8.Text ;
+quantidade1.SelectAll;
+end;
+end;
+
+
+
+
+procedure TfrmEntradaSerradaProdutos.tipoChange(Sender: TObject);
+begin
+    if tipo.ItemIndex = 0 then    //PECA
+    begin
+    essencia.KeyValue := '';
+    quantidade1.Enabled := true;
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+//    QTDEM2.Enabled  := False;
+//    QTDEML.Enabled  := FALSE;
+    comp.Enabled  := true;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled  := true;
+    valtotal.TabStop := false;
+    valtotal.ReadOnly := true;
+//    QTDEM2.Clear;
+//    QTDEML.Clear;
+    edit13.Text := '0';
+    edit14.Text := '0';
+    bitbtn1.Visible := true;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := false;
+    mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 1 then //M3
+    begin
+        essencia.KeyValue := '';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := false;
+//    QTDEM2.Enabled  := False;
+  //  QTDEML.Enabled  := FALSE;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := true;
+    valtotal.ReadOnly := false;
+  //      QTDEM2.Clear;
+//    QTDEML.Clear;
+    edit13.Text := '0';
+    edit14.Text := '0';
+//    quantidade1.Text := '0';
+  //  comp.Text := '0,00';
+//    larg.Text := '0,000';
+  //  exp.Text := '0,000';
+    bitbtn1.Visible := false;
+    m3.Visible := true;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := false;
+    mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 2 then    //M2
+    begin
+        essencia.KeyValue := '';
+    DM.TESDISCRIMINACAO['TOTALM3'] := '0,000';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := true;
+//    QTDEM2.Enabled  := True;
+  //  QTDEML.Enabled  := FALSE;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := false;
+    valtotal.ReadOnly := true;
+    //QTDEML.Clear;
+    quantidade1.Text := '0';
+    comp.Text := '0,00';
+    larg.Text := '0,000';
+    exp.Text := '0,000';
+    valtotal.Text := '0,0000';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := true;
+    ml.Visible := false;
+    jg.Visible := false;
+    mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 3 then   //ML
+    begin
+        essencia.KeyValue := '';
+    DM.TESDISCRIMINACAO['TOTALM3'] := '0,000';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := true;
+//    QTDEM2.Enabled  := False;
+  //  QTDEML.Enabled  := true;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := False;
+    valtotal.ReadOnly := true;
+    //    QTDEM2.Clear;
+            quantidade1.Text := '0';
+//    comp.Text := '0,00';
+//    larg.Text := '0,000';
+  //  exp.Text := '0,000';
+    valtotal.Text := '0,0000';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := true;
+    jg.Visible := false;
+    mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 4 then    //JG
+    begin
+        essencia.KeyValue := '';
+    DM.TESDISCRIMINACAO['TOTALM3'] := '0,000';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := true;
+//    QTDEM2.Enabled  := False;
+  //  QTDEML.Enabled  := false;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := False;
+    valtotal.ReadOnly := true;
+    //QTDEM2.Clear;
+   quantidade1.Text := '0';
+    comp.Text := '0,00';
+    larg.Text := '0,000';
+    exp.Text := '0,000';
+    valtotal.Text := '0,0000';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := true;
+    mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 5 then    //outros
+    begin
+    essencia.KeyValue := 'DIVERSOS';
+    DM.TESDISCRIMINACAO['ESSENCIA']:='DIVERSOS';
+    dbedit5.Text := '87';
+
+    quantidade1.Enabled := true;
+    essencia.Enabled  := false;
+    essenciatipo.Enabled  := true;
+//    QTDEM2.Enabled  := False;
+//    QTDEML.Enabled  := FALSE;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled  := true;
+    valtotal.TabStop := false;
+    valtotal.ReadOnly := true;
+//    QTDEM2.Clear;
+//    QTDEML.Clear;
+    edit13.Text := '0';
+    edit14.Text := '0';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := false;
+    mc.Visible := true;
+    end;
+    end;
+    end;
+    end;
+end;
+end;
+end;
+
+
+procedure TfrmEntradaSerradaProdutos.tipoExit(Sender: TObject);
+begin
+    if tipo.ItemIndex = 0 then
+    begin
+    quantidade1.Enabled := true;
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    comp.Enabled  := true;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled  := true;
+    valtotal.TabStop := false;
+    valtotal.ReadOnly := true;
+    edit13.Text := '0';
+    edit14.Text := '0';
+//    quantidade1.Text := '0';
+    bitbtn1.Visible := true;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := false;
+        mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 1 then
+    begin
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := false;
+  //  QTDEM2.Enabled  := False;
+    //QTDEML.Enabled  := FALSE;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := true;
+    valtotal.ReadOnly := false;
+//        QTDEM2.Clear;
+  //  QTDEML.Clear;
+        edit13.Text := '0';
+    edit14.Text := '0';
+//        quantidade1.Text := '0';
+  //  comp.Text := '0,00';
+//    larg.Text := '0,000';
+  //  exp.Text := '0,000';
+    bitbtn1.Visible := false;
+    m3.Visible := true;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := false;
+        mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 2 then
+    begin
+        DM.TESDISCRIMINACAO['TOTALM3'] := '0,000';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := true;
+    //QTDEM2.Enabled  := True;
+//    QTDEML.Enabled  := FALSE;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := false;
+    valtotal.ReadOnly := true;
+  //  QTDEML.Clear;
+//        quantidade1.Text := '0';
+    comp.Text := '0,00';
+    larg.Text := '0,000';
+    exp.Text := '0,000';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := true;
+    ml.Visible := false;
+    jg.Visible := false;
+        mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 3 then
+    begin
+        DM.TESDISCRIMINACAO['TOTALM3'] := '0,000';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := true;
+    //QTDEM2.Enabled  := False;
+//    QTDEML.Enabled  := true;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := False;
+    valtotal.ReadOnly := true;
+  //      QTDEM2.Clear;
+//            quantidade1.Text := '0';
+//    comp.Text := '0,00';
+  //  larg.Text := '0,000';
+    //exp.Text := '0,000';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := true;
+    jg.Visible := false;
+        mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 4 then
+    begin
+    DM.TESDISCRIMINACAO['TOTALM3'] := '0,000';
+    essencia.Enabled  := true;
+    essenciatipo.Enabled  := true;
+    quantidade1.Enabled := true;
+//    QTDEM2.Enabled  := False;
+  //  QTDEML.Enabled  := false;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled := true;
+    valtotal.TabStop := False;
+    valtotal.ReadOnly := true;
+//    QTDEM2.Clear;
+//    quantidade1.Text := '0';
+    comp.Text := '0,00';
+    larg.Text := '0,000';
+    exp.Text := '0,000';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := true;
+        mc.Visible := false;
+    end
+    else
+    begin
+    if tipo.ItemIndex = 5 then
+    begin
+    essencia.KeyValue := 'DIVERSOS';
+    DM.TESDISCRIMINACAO['ESSENCIA']:='DIVERSOS';
+    dbedit5.Text := '87';
+
+    quantidade1.Enabled := true;
+    essencia.Enabled  := false;
+    essenciatipo.Enabled  := true;
+//    QTDEM2.Enabled  := False;
+//    QTDEML.Enabled  := FALSE;
+    comp.Enabled  := false;
+    larg.Enabled  := false;
+    exp.Enabled  := false;
+    valunitario.Enabled  := true;
+    valtotal.TabStop := false;
+    valtotal.ReadOnly := true;
+//    QTDEM2.Clear;
+//    QTDEML.Clear;
+    edit13.Text := '0';
+    edit14.Text := '0';
+    bitbtn1.Visible := false;
+    m3.Visible := false;
+    m2.Visible := false;
+    ml.Visible := false;
+    jg.Visible := false;
+    mc.Visible := true;
+    end;
+    end;
+    end;
+    end;
+end;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.VALVENDAExit(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var vn21, vn22, vn23, vn24, vn25, vn26, vn27, vn28, vsoma21, vsoma22: Real;
+begin
+ if tipo.ItemIndex = 1 then     //m3
+begin
+      if (valunitario.Text = '0,00') and (valvendam3.Text = '0,00') then exit else
+
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn11:=0;
+      vn12:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma6:=0;
+
+      vn1:= quantidade1.Value;
+      vn2:= COMP.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn7:= VALTOTAL.Value;
+      vn11:= VALVENDAM3.Value;
+      vn12:= LUCRO.Value;
+
+      vsoma6 := vn11/vn5*100-100;
+      vsoma := vn1 * vn2 * vn3 * vn4;
+      vsoma1 := vsoma * vn5;
+
+      LUCRO.Text := FloatToStr(vsoma6);
+      VALTOTAL.Text := FloatToStr(vsoma);
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+end
+else
+begin
+
+
+if tipo.ItemIndex = 3 then  //ML
+begin
+	if ESSENCIA.Text ='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text ='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0,00' then
+   	begin
+         Application.MessageBox('Quantidade deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+//	if QTDEML.Text ='0,00' then
+  // 	begin
+    //     Application.MessageBox('Quantidade de ML deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   QTDEML.SetFocus;
+//    end
+  //  else
+    //begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+  //  end
+//    else
+  //  begin
+//	if VALVENDA.Text ='0,00' then
+  // 	begin
+    //     Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   VALVENDA.SetFocus;
+  //  end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+//                                                                               and (QTDEML.Text <> '0,00')
+if (ESSENCIA.Text <> '')and(ESSENCIATIPO.Text <> '')and (quantidade1.Text <>'0,00') and(VALUNITARIO.Text  <> '0,00') and (VALVENDAM3.Text <> '0,00')then //and (VALVENDA.Text <> '0,00')then
+begin
+
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn7:=0;
+      vn11:=0;
+      vn12:=0;
+
+      vsoma:=0;
+      vsoma5:=0;
+      vsoma6:=0;
+
+      vn1:= quantidade1.Value;
+      vn2:= QTDEML.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn7:= VALTOTAL.Value;
+      vn11:= VALVENDAM3.Value;
+      vn12:= LUCRO.Value;
+
+      vsoma6 := vn11/vn5*100-100;
+      vsoma5 := vn1 * vn3 * vn4;
+      vsoma :=  vn5 * vn1;
+
+      LUCRO.Text := FloatToStr(vsoma6);
+      VALTOTAL.Text := FloatToStr(vsoma5);
+      VALTOTAL1.Text := FloatToStr(vsoma);
+      end;
+end
+else
+begin
+
+if tipo.ItemIndex = 4 then //jg
+begin
+	if ESSENCIA.Text='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0,00' then
+   	begin
+         Application.MessageBox('Quantidade deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+//	if COMP.Text='0,00' then
+  // 	begin
+    //     Application.MessageBox('Comprimento deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   COMP.SetFocus;
+//    end
+  //  else
+    //begin
+//	if LARG.Text='0,000' then
+  // 	begin
+    //     Application.MessageBox('Largura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   LARG.SetFocus;
+//    end
+  //  else
+    //begin
+//	if EXP.Text='0,000' then
+  // 	begin
+    //     Application.MessageBox('Expessura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   EXP.SetFocus;
+//    end
+  //  else
+    //begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+//    end
+  //  else
+ //   begin
+//	if VALVENDA.Text='0,00' then
+ //  	begin
+   //      Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+    //     VALVENDA.SetFocus;
+   // end;
+    end;
+//    end;
+  //  end;
+    //end;
+    end;
+    end;
+    END;
+    end;
+
+
+if (ESSENCIA.Text <> '') and (ESSENCIATIPO.Text <> '') and (quantidade1.Text <> '0,00') and (VALUNITARIO.Text <> '0,00')and(VALVENDAM3.Text <> '0,00')then //and(VALVENDA.Text <> '0,00') then and(comp.Text <> '0,00')and (LARG.Text <> '0,000') and(EXP.Text <> '0,000')
+begin
+     vn21:=0;
+      vn22:=0;
+      vn23:=0;
+      vn24:=0;
+      vn25:=0;
+      vn26:=0;
+      vn27:=0;
+      vn28:=0;
+      vn1:=0;
+
+      vsoma21:=0;
+      vsoma5:=0;
+      vsoma22:=0;
+
+      vn21:= quantidade1.Value;
+      vn22:= LARG.Value;
+      vn23:= EXP.Value;
+      vn24:= VALUNITARIO.Value;
+      vn25:= VALTOTAL.Value;
+      vn26:= VALVENDAM3.Value;
+      vn27:= LUCRO.Value;
+      vn1:= comp.Value;
+
+      vsoma21 := vn26/vn24*100-100;
+      vsoma22 := vn21 * vn24;
+      vsoma5:= vn21*vn1*vn22*vn23;
+
+      VALTOTAL1.Text := FloatToStr(vsoma22);
+      LUCRO.Text := FloatToStr(vsoma21);
+      VALTOTAL.Text := floatToStr(vsoma5);
+end;
+end
+else
+begin
+
+if tipo.ItemIndex = 0 then   //pc
+begin
+	if ESSENCIA.Text='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0' then
+   	begin
+         Application.MessageBox('Quantidade de Peças deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+	if COMP.Text='0,00' then
+   	begin
+         Application.MessageBox('Comprimento deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         COMP.SetFocus;
+    end
+    else
+    begin
+	if LARG.Text='0,000' then
+   	begin
+         Application.MessageBox('Largura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         LARG.SetFocus;
+    end
+    else
+    begin
+	if EXP.Text='0,000' then
+   	begin
+         Application.MessageBox('Expessura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         EXP.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+ //   end
+ //   else
+  //  begin
+ //	if VALVENDA.Text='0,00' then
+   //	begin
+   //      Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+  //       VALVENDA.SetFocus;
+ //   end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+
+if (ESSENCIA.Text <> '') and (ESSENCIATIPO.Text <> '') and (quantidade1.Text <> '0') and(COMP.Text <> '0,00') and(LARG.Text <> '0,000') and(EXP.Text <> '0,000')and (VALUNITARIO.Text <> '0,00')and (VALVENDAM3.Text <> '0,00')then //and(VALVENDA.Text <> '0,00') then
+begin
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn11:=0;
+      vn12:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma6:=0;
+
+      vn1:= quantidade1.Value;
+      vn2:= COMP.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn7:= VALTOTAL.Value;
+      vn11:= VALVENDAM3.Value;
+      vn12:= LUCRO.Value;
+
+      vsoma6 := vn11/vn5*100-100;
+      vsoma := vn1 * vn2 * vn3 * vn4;
+      vsoma1 := vsoma * vn5;
+
+      LUCRO.Text := FloatToStr(vsoma6);
+      VALTOTAL.Text := FloatToStr(vsoma);
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+
+end;
+end
+else
+begin
+
+if tipo.ItemIndex = 2 then  //m2
+begin
+	if ESSENCIA.Text ='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text ='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0,00' then
+   	begin
+         Application.MessageBox('Quantidade deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+
+
+
+//  if QTDEM2.Text ='0,00' then
+  // 	begin
+    //     Application.MessageBox('Quantidade de M2 deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   QTDEM2.SetFocus;
+//    end
+  //  else
+    //begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+ //   end
+ //   else
+  //  begin
+ //	if VALVENDA.Text ='0,00' then
+ //  	begin
+ //        Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+ //        VALVENDA.SetFocus;
+ //   end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+//                                                    and (QTDEM2.Text <> '0,00')
+if (ESSENCIA.Text <> '')and(ESSENCIATIPO.Text <> '')and (quantidade1.Text <> '0,00')and(VALUNITARIO.Text  <> '0,00') and (VALVENDAM3.Text <> '0,00')then //and (VALVENDA.Text <> '0,00')then
+begin
+      vn14:=0;
+      vn15:=0;
+      vn16:=0;
+      vn17:=0;
+      vn1:=0;
+      vn2:=0;
+
+      vsoma7:=0;
+      vsoma8:=0;
+      vsoma5:=0;
+
+      vn14:= VALUNITARIO.Value;
+      vn18:= VALVENDAM3.Value ;
+      vn15:= QUANTIDADE1.Value;
+      vn16:= VALVENDA.Value;
+      vn17:= LUCRO.Value;
+      vn1 := LARG.Value;
+      vn2 := EXP.Value;
+
+      vsoma8 := vn18/vn14*100-100;
+      vsoma7 := vn14 * vn15;
+      vsoma5:= vn15*vn2;
+
+      LUCRO.Text := FloatToStr(vsoma8);
+      VALTOTAL1.Text := FloatToStr(vsoma7);
+      VALTOTAL.Text := FloatToStr(vsoma5);
+end;
+end
+else
+begin
+
+if tipo.ItemIndex = 5 then //outros
+begin
+	if ESSENCIA.Text='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0' then
+   	begin
+         Application.MessageBox('Quantidade de Peças deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+ //   end
+ //   else
+ //   begin
+ //	if VALVENDA.Text='0,00' then
+ //  	begin
+  //       Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+  //       VALVENDA.SetFocus;
+  //  end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+
+if (ESSENCIA.Text <> '') and (ESSENCIATIPO.Text <> '') and (quantidade1.Text <> '0') and (VALUNITARIO.Text <> '0,00')and (VALVENDAM3.Text <> '0,00')then //and(VALVENDA.Text <> '0,00') then
+begin
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn11:=0;
+      vn12:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma6:=0;
+
+      vn1:= quantidade1.Value;
+      vn2:= COMP.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn7:= VALTOTAL.Value;
+      vn11:= VALVENDAM3.Value;
+      vn12:= LUCRO.Value;
+
+      vsoma6 := vn11/vn5*100-100;
+//      vsoma := vn1 * vn2 * vn3 * vn4;
+      vsoma1 := vn1 * vn5;
+
+      LUCRO.Text := FloatToStr(vsoma6);
+      VALTOTAL.Text := '0,0000';
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+
+end;
+end;
+end;
+end;
+end;
+end;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.VALVENDAM3Enter(Sender: TObject);
+begin
+if edit11.Text = '' then
+begin
+valvendam3.Text := '0,00';
+VALVENDAM3.SelectAll;
+end
+else
+begin
+VALVENDAM3.Text := edit11.Text ;
+VALVENDAM3.SelectAll;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.VALVENDAEnter(Sender: TObject);
+begin
+if edit12.Text = '' then
+begin
+valvenda.Text := '0,00';
+VALVENDA.SelectAll;
+end
+else
+begin
+VALVENDA.Text := edit12.Text ;
+VALVENDA.SelectAll;
+end;
+end;
+
+
+procedure TfrmEntradaSerradaProdutos.VALTOTALExit(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+begin
+	if ESSENCIA.Text ='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text ='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text ='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+    end
+    else
+    begin
+	if VALTOTAL.Value = 0 then
+   	begin
+         Application.MessageBox('Total de M3 deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALTOTAL.SetFocus;
+    end
+//   else
+    end;
+    end;
+    end;
+    end;
+
+if (ESSENCIA.Text <> '')and(ESSENCIATIPO.Text <> '')and (VALUNITARIO.Text  <> '0,00') and  (VALVENDAM3.Text <> '0,00')and (VALTOTAL.Value <> 0) then//(VALVENDA.Text <> '0,00')and
+begin
+DM.TESDISCRIMINACAO['QUANTIDADE'] := '0';
+DM.TESDISCRIMINACAO['COMPRIMENTO'] := '0';
+DM.TESDISCRIMINACAO['LARGURA'] := '0';
+DM.TESDISCRIMINACAO['EXPESSURA'] := '0';
+DM.TESDISCRIMINACAO['TOTALM3']:= VALTOTAL.Text;
+DM.TESDISCRIMINACAO['VALTOTAL']:= VALTOTAL1.Text;
+
+      vn5:=0;
+      vn7:=0;
+      vn11:=0;
+      vn12:=0;
+
+      vsoma:=0;
+      vsoma6:=0;
+
+      vn5:= VALUNITARIO.Value;
+      vn7:= VALTOTAL.Value;
+      vn11:= VALVENDAM3.Value;
+      vn12:= LUCRO.Value;
+
+      vsoma := vn7 * vn5;
+      vsoma6 := vn11/vn5*100-100;
+
+      VALTOTAL1.Text := FloatToStr(vsoma);
+      LUCRO.Text := FloatToStr(vsoma6);
+    end
+end;
+
+procedure TfrmEntradaSerradaProdutos.QTDEMLChange(Sender: TObject);
+begin
+edit13.Text := qtdeml.Text;
+edit14.Text := '0';
+end;
+
+procedure TfrmEntradaSerradaProdutos.QTDEMLExit(Sender: TObject);
+begin
+edit13.Text := qtdeml.Text;
+edit14.Text := '0';
+end;
+
+procedure TfrmEntradaSerradaProdutos.QTDEM2Change(Sender: TObject);
+begin
+edit14.Text := qtdem2.Text ;
+edit13.Text := '0';
+end;
+
+procedure TfrmEntradaSerradaProdutos.QTDEM2Exit(Sender: TObject);
+begin
+edit14.Text := qtdem2.Text ;
+edit13.Text := '0';
+end;
+
+procedure TfrmEntradaSerradaProdutos.ESSENCIATIPOKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+if key = VK_SPACE then
+essenciatipo.DropDown;
+end;
+
+procedure TfrmEntradaSerradaProdutos.ESSENCIAKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+if key = VK_SPACE then
+essencia.DropDown;
+end;
+
+procedure TfrmEntradaSerradaProdutos.M3Click(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var total, total1, total2, total3, total4, total5, total6 : Real;
+begin
+if tipo.Text  = 'M3' then
+begin
+	if ESSENCIA.Text ='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text ='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text ='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+    end
+    else
+    begin
+	if VALVENDA.Text ='0,00' then
+   	begin
+      //   Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+       //  VALVENDA.SetFocus;
+    end
+    else
+    begin
+	if VALTOTAL.Value = 0 then
+   	begin
+         Application.MessageBox('Total de M3 deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALTOTAL.SetFocus;
+    end
+    else
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+if (VALTOTAL.Value <> 0)and (ESSENCIA.Text <> '')and(ESSENCIATIPO.Text <> '')and (VALUNITARIO.Text  <> '0,00') and (VALVENDAM3.Text <> '0,00')then //and (VALVENDA.Text <> '0,00')then
+begin
+DM.TESDISCRIMINACAO['QUANTIDADE'] := '0';
+DM.TESDISCRIMINACAO['COMPRIMENTO'] := '0';
+DM.TESDISCRIMINACAO['LARGURA'] := '0';
+DM.TESDISCRIMINACAO['EXPESSURA'] := '0';
+if dbedit2.Text = '' then
+begin
+dbedit10.Text := '0';
+end
+else
+begin
+if dbedit2.Text <> '' then
+begin
+dbedit10.Text := '1';
+end;
+end;
+
+if tipo.ItemIndex = 1 then
+begin
+DM.TESDISCRIMINACAO['QTDEM2'] :='0';
+DM.TESDISCRIMINACAO['QTDEML'] := '0';
+end
+else
+if tipo.ItemIndex = 4 then
+begin
+DM.TESDISCRIMINACAO['QUANTIDADE'] := '0';
+DM.TESDISCRIMINACAO['COMPRIMENTO'] := '0';
+DM.TESDISCRIMINACAO['QTDEM2'] :='0';
+DM.TESDISCRIMINACAO['QTDEML'] := '0';
+end;
+
+DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (DBEDIT5.Text)+ ' and CODIGOPRODUTO = ' + (DBEDIT9.Text) + 'and COMPRIMENTO = ' + (EDIT1.Text)+ 'and LARGURA = ' + (EDIT2.Text)+ 'and EXPESSURA = ' + (EDIT3.Text);
+DM.TESTOQUE.Filtered := True;
+DM.TESTOQUE.Open;
+
+If Application.MessageBox('Confirma Lançamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+edit8.Text := quantidade1.Text ;
+edit9.Text := essencia.Text;
+edit10.Text := essenciatipo.Text;
+edit4.Text := comp.Text;
+edit5.Text := larg.Text;
+edit6.Text := exp.Text;
+edit7.Text := valunitario.Text;
+edit11.Text := VALVENDAM3.Text;
+edit12.Text := VALVENDA.Text;
+
+      if DM.TESTOQUE.RecordCount = 0 then
+      begin
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+
+      DM.TESTOQUE.Append;
+      DM.TESTOQUE['QUANTIDADE']:= QUANTIDADE1.Text;
+      DM.TESTOQUE['CODIGOESSENCIA']:= DBEDIT5.Text;
+      DM.TESTOQUE['ESSENCIA']:= ESSENCIA.Text;
+      DM.TESTOQUE['ESSENCIATIPO']:= ESSENCIATIPO.Text;
+      DM.TESTOQUE['CODIGOPRODUTO']:= DBEDIT9.Text;
+      DM.TESTOQUE['COMPRIMENTO']:= COMP.Text ;
+      DM.TESTOQUE['LARGURA']:= LARG.Text;
+      DM.TESTOQUE['EXPESSURA']:= EXP.Text ;
+      DM.TESTOQUE['VALUNITARIO'] := VALUNITARIO.Text;
+      DM.TESTOQUE['TOTALM3']:= VALTOTAL.Text;
+      DM.TESTOQUE['QTDEM2']:= QTDEM2.Value;
+      DM.TESTOQUE['QTDEML']:= QTDEML.Value;
+      DM.TESTOQUE['VALTOTAL']:= VALTOTAL1.Text;
+      DM.TESTOQUE.Post;
+      DM.TESDISCRIMINACAO.Post;
+      end
+      else
+      begin
+      if DM.TESTOQUE.RecordCount <> 0 then
+      begin
+      DM.TESTOQUE.Edit;
+
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn8:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma4:=0;
+      vsoma5:=0;
+
+      vn1:= quantidade1.Value;
+
+      vn6:= DM.TESTOQUE['QUANTIDADE'];
+      vn7:= VALTOTAL.Value;
+      vn8:= DM.TESTOQUE['TOTALM3'];
+
+      vsoma4 := DM.TESTOQUE['QUANTIDADE']+ vn1;
+      vsoma3 := vn8+vn7;
+
+      DM.TESTOQUE['QUANTIDADE']:= FloatToStr(vsoma4);
+      DM.TESTOQUE['TOTALM3']:= (vsoma3);
+
+      DM.TESDISCRIMINACAO.Post;
+      DM.TESTOQUE.Post;
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+      end;
+      end;
+
+
+        If Application.MessageBox('Insere Outro Produto para esta Nota Fiscal?', 'Confirmação',
+        mb_YesNo + mb_ICONQUESTION) = idYes then
+        begin
+        DM.TESDISCRIMINACAO.Append;
+        quantidade1.Text := edit8.Text;
+        essencia.KeyValue  := edit9.text;
+        essenciatipo.KeyValue := edit10.text;
+        comp.Text := edit4.Text;
+        larg.Text := edit5.Text;
+        exp.Text := edit6.Text;
+        valunitario.Text := edit7.Text ;
+        VALVENDAM3.Text := edit11.Text ;
+        VALVENDA.Text := edit12.Text ;
+
+        EDITDATA.Text := frmEntradaSerrada.data.Text;
+        DBEDIT3.Text := frmEntradaSerrada.DBEDit6.Text;
+        DBEDIT4.Text := frmEntradaSerrada.nota.Text;
+        DBEDIT6.Text := frmEntradaSerrada.FORNECEDOR.Text;
+        TIPO.SetFocus;
+        end
+        else
+        begin
+        frmentradaserrada.DBGrid2.Visible  := true;
+        frmentradaserrada.DBGrid3.Visible  := false;
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        frmentradaserrada.BitBtn115.Enabled := true;
+        close;
+        end;
+end
+else
+tipo.SetFocus;
+end;
+end;
+
+procedure TfrmEntradaSerradaProdutos.M2Click(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var total, total1, total2, total3, total4, total5, total6 : Real;
+begin
+if tipo.Text = 'M2' then
+begin
+	if ESSENCIA.Text ='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text ='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+//  if QTDEM2.Text ='0,00' then
+  // 	begin
+    //     Application.MessageBox('Quantidade de M2 deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   QTDEM2.SetFocus;
+//    end
+  //  else
+    //begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+    end
+    else
+    begin
+	if VALVENDA.Text ='0,00' then
+   	begin
+     //    Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   VALVENDA.SetFocus;
+    end
+    else
+    end;
+    end;
+    end;
+    end;
+    end;
+//    end;
+//                                                        (QTDEM2.Text <> '0,00')and
+if (ESSENCIA.Text <> '')and(ESSENCIATIPO.Text <> '')and (VALUNITARIO.Text  <> '0,00') and (VALVENDAM3.Text <> '0,00')then //and (VALVENDA.Text <> '0,00')then
+begin
+if situacao.Text = '' then
+begin
+situacao.Text := '0';
+end;
+
+if DBEDIT7.Text = '' then
+begin
+dbedit7.Text := '0';
+end;
+
+if DBEDIT8.Text = '' then
+begin
+dbedit8.Text := '0';
+end;
+
+if dbedit2.Text = '' then
+begin
+dbedit10.Text := '0';
+end;
+//else
+//begin
+if dbedit2.Text <> '' then
+begin
+dbedit10.Text := '1';
+end;
+//end
+
+  DM.TESDISCRIMINACAO['QTDEM2'] :=QUANTIDADE1.Text;
+  DM.TESDISCRIMINACAO['QTDEML'] := '0';
+  DM.TESDISCRIMINACAO['COMPRIMENTO'] := '0';
+
+DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (DBEDIT5.Text)+ ' and CODIGOPRODUTO = ' + (DBEDIT9.Text);
+DM.TESTOQUE.Filtered := True;
+DM.TESTOQUE.Open;
+
+If Application.MessageBox('Confirma Lançamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+edit8.Text := quantidade1.Text ;
+edit9.Text := essencia.Text;
+edit10.Text := essenciatipo.Text;
+edit4.Text := comp.Text;
+edit5.Text := larg.Text;
+edit6.Text := exp.Text;
+edit7.Text := valunitario.Text;
+edit11.Text := VALVENDAM3.Text;
+edit12.Text := VALVENDA.Text;
+
+      if DM.TESTOQUE.RecordCount = 0 then
+      begin
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+
+      DM.TESTOQUE.Append;
+      DM.TESTOQUE['QUANTIDADE']:= quantidade1.Text;
+      DM.TESTOQUE['CODIGOESSENCIA']:= DBEDIT5.Text;
+      DM.TESTOQUE['ESSENCIA']:= ESSENCIA.Text;
+      DM.TESTOQUE['ESSENCIATIPO']:= ESSENCIATIPO.Text;
+      DM.TESTOQUE['CODIGOPRODUTO']:= DBEDIT9.Text;
+      DM.TESTOQUE['COMPRIMENTO']:= COMP.Text ;
+      DM.TESTOQUE['LARGURA']:= LARG.Text ;
+      DM.TESTOQUE['EXPESSURA']:= EXP.Text ;
+      DM.TESTOQUE['VALUNITARIO']:= VALUNITARIO.Text;
+      DM.TESTOQUE['TOTALM3']:= VALTOTAL.Text ;
+      DM.TESTOQUE['VALTOTAL']:= VALTOTAL1.Text;
+      DM.TESTOQUE['QTDEML']:= edit13.Text ;
+        if tipo.ItemIndex = 2 then
+        begin
+        DM.TESTOQUE['QTDEM2']:= QUANTIDADE1.Text ;
+        end
+        else
+        begin
+        if tipo.ItemIndex = 3 then
+        DM.TESTOQUE['QTDEM2'] := '0';
+        end;
+
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := FALSE;
+      DM.TESTOQUE.Close;
+      DM.TESDISCRIMINACAO.Post;
+      end
+      else
+      begin
+      if DM.TESTOQUE.RecordCount <> 0 then
+      begin
+      DM.TESTOQUE.Edit;
+
+      vn5:=0;
+      vn7:=0;
+      vn8:=0;
+      vn9:=0;
+      vn10:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+
+      vn5:= VALUNITARIO.Value;
+      vn7:= QUANTIDADE1.Value;
+      vn9:= VALTOTAL.Value;
+      vn8:= DM.TESTOQUE['QUANTIDADE'];
+      vn10:= DM.TESTOQUE['TOTALM3'];
+
+      vsoma := vn8 + vn7;
+      vsoma1 := vn7 * vn5;
+      vsoma2:= vn10 + vn9;
+
+      DM.TESTOQUE['QUANTIDADE']:= (vsoma);
+      DM.TESTOQUE['TOTALM3']:= (vsoma2);
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+      DM.TESTOQUE['QTDEM2'] := (vsoma);
+
+        if tipo.ItemIndex = 2 then
+        begin
+        DM.TESTOQUE['QTDEM2']:= (vsoma) ;
+        DM.TESTOQUE['TOTALM3']:= (vsoma2);        
+        end
+        else
+        begin
+        if tipo.ItemIndex = 3 then
+        DM.TESTOQUE['QTDEM2'] := '0';
+        end;
+
+
+      DM.TESDISCRIMINACAO.Post;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := false;
+      DM.TESTOQUE.Close;
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+      end;
+      end;
+
+
+        If Application.MessageBox('Insere Outro Produto para esta Nota Fiscal?', 'Confirmação',
+        mb_YesNo + mb_ICONQUESTION) = idYes then
+        begin
+        DM.TESDISCRIMINACAO.Append;
+        quantidade1.Text := edit8.Text;
+        essencia.KeyValue  := edit9.text;
+        essenciatipo.KeyValue := edit10.text;
+        comp.Text := edit4.Text;
+        larg.Text := edit5.Text;
+        exp.Text := edit6.Text;
+        valunitario.Text := edit7.Text ;
+        VALVENDAM3.Text := edit11.Text ;
+        VALVENDA.Text := edit12.Text ;
+
+        EDITDATA.Text := frmEntradaSerrada.data.Text;
+        DBEDIT3.Text := frmEntradaSerrada.DBEDit6.Text;
+        DBEDIT4.Text := frmEntradaSerrada.nota.Text;
+        DBEDIT6.Text := frmEntradaSerrada.FORNECEDOR.Text;
+        TIPO.SetFocus;
+        end
+        else
+        begin
+        frmentradaserrada.DBGrid2.Visible  := true;
+        frmentradaserrada.DBGrid3.Visible  := false;
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        frmentradaserrada.BitBtn115.Enabled := true;
+        close;
+        end;
+end
+else
+tipo.SetFocus;
+end
+end;
+
+procedure TfrmEntradaSerradaProdutos.MLClick(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var total, total1, total2, total3, total4, total5, total6 : Real;
+begin
+if tipo.Text = 'ML' then
+begin
+	if ESSENCIA.Text ='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text ='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+//	if QTDEML.Text ='0,00' then
+  // 	begin
+    //     Application.MessageBox('Quantidade de ML deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   QTDEML.SetFocus;
+//    end
+  //  else
+    //begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+    end
+    else
+    begin
+	if VALVENDA.Text ='0,00' then
+   	begin
+    //     Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+      //   VALVENDA.SetFocus;
+    end
+    else
+    end;
+    end;
+    end;
+    end;
+    end;
+  //  end;
+//   (QTDEML.Text <> '0,00')and
+if  (ESSENCIA.Text <> '')and(ESSENCIATIPO.Text <> '')and (VALUNITARIO.Text  <> '0,00') and (VALVENDAM3.Text <> '0,00')then //(VALVENDA.Text <> '0,00')and
+begin
+if situacao.Text = '' then
+begin
+situacao.Text := '0';
+end;
+
+if DBEDIT7.Text = '' then
+begin
+dbedit7.Text := '0';
+end;
+
+if DBEDIT8.Text = '' then
+begin
+dbedit8.Text := '0';
+end;
+
+if dbedit2.Text = '' then
+begin
+dbedit10.Text := '0';
+end
+else
+begin
+if dbedit2.Text <> '' then
+begin
+dbedit10.Text := '1';
+end;
+end;
+
+DM.TESDISCRIMINACAO['QTDEML'] := QUANTIDADE1.Text;
+DM.TESDISCRIMINACAO['QTDEM2'] :='0';
+DM.TESDISCRIMINACAO['COMPRIMENTO'] := '0';
+
+DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (DBEDIT5.Text)+ ' and CODIGOPRODUTO = ' + (DBEDIT9.Text);
+DM.TESTOQUE.Filtered := True;
+DM.TESTOQUE.Open;
+
+If Application.MessageBox('Confirma Lançamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+edit8.Text := quantidade1.Text ;
+edit9.Text := essencia.Text;
+edit10.Text := essenciatipo.Text;
+edit4.Text := comp.Text;
+edit5.Text := larg.Text;
+edit6.Text := exp.Text;
+edit7.Text := valunitario.Text;
+edit11.Text := VALVENDAM3.Text;
+edit12.Text := VALVENDA.Text;
+
+      if DM.TESTOQUE.RecordCount = 0 then
+      begin
+
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+
+      DM.TESTOQUE.Append;
+      DM.TESTOQUE['QUANTIDADE']:= quantidade1.Text ;
+      DM.TESTOQUE['CODIGOESSENCIA']:= DBEDIT5.Text;
+      DM.TESTOQUE['ESSENCIA']:= ESSENCIA.Text;
+      DM.TESTOQUE['ESSENCIATIPO']:= ESSENCIATIPO.Text;
+      DM.TESTOQUE['CODIGOPRODUTO']:= DBEDIT9.Text;
+      DM.TESTOQUE['COMPRIMENTO']:= COMP.Text ;
+      DM.TESTOQUE['LARGURA']:= LARG.Text ;
+      DM.TESTOQUE['EXPESSURA']:= EXP.Text ;
+      DM.TESTOQUE['VALUNITARIO']:= VALUNITARIO.Text;
+      DM.TESTOQUE['TOTALM3']:= VALTOTAL.Text;
+      DM.TESTOQUE['VALTOTAL']:= VALTOTAL1.Text;
+      DM.TESTOQUE['QTDEM2']:= '0';
+      DM.TESTOQUE['QTDEML']:= edit8.Text ;
+
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := FALSE;
+      DM.TESTOQUE.Close;
+      DM.TESDISCRIMINACAO.Post;
+      end
+      else
+      begin
+      if DM.TESTOQUE.RecordCount <> 0 then
+      begin
+      DM.TESTOQUE.Edit;
+
+      vn5:=0;
+      vn7:=0;
+      vn8:=0;
+      vn9:=0;
+      vn10:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+
+      vn5:= VALUNITARIO.Value;
+      vn7:= QUANTIDADE1.Value;
+      vn8:= DM.TESTOQUE['QUANTIDADE'];
+      vn9:= VALTOTAL.Value;
+      vn10:= DM.TESTOQUE['TOTALM3'];
+
+      vsoma := vn8 + vn7;
+      vsoma1 := vn7 * vn5;
+      VSOMA2 := VN10 + vn9;
+
+      DM.TESTOQUE['QTDEML']:= (vsoma);
+      DM.TESTOQUE['QUANTIDADE']:= (vsoma);
+      DM.TESTOQUE['TOTALM3']:= (vsoma2);
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+
+      DM.TESDISCRIMINACAO.Post;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := false;
+      DM.TESTOQUE.Close;
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+      end;
+      end;
+
+        If Application.MessageBox('Insere Outro Produto para esta Nota Fiscal?', 'Confirmação',
+        mb_YesNo + mb_ICONQUESTION) = idYes then
+        begin
+        DM.TESDISCRIMINACAO.Append;
+        quantidade1.Text := edit8.Text;
+        essencia.KeyValue  := edit9.text;
+        essenciatipo.KeyValue := edit10.text;
+        comp.Text := edit4.Text;
+        larg.Text := edit5.Text;
+        exp.Text := edit6.Text;
+        valunitario.Text := edit7.Text ;
+        VALVENDAM3.Text := edit11.Text ;
+        VALVENDA.Text := edit12.Text ;
+
+        EDITDATA.Text := frmEntradaSerrada.data.Text;
+        DBEDIT3.Text := frmEntradaSerrada.DBEDit6.Text;
+        DBEDIT4.Text := frmEntradaSerrada.nota.Text;
+        DBEDIT6.Text := frmEntradaSerrada.FORNECEDOR.Text;
+        TIPO.SetFocus;
+        end
+        else
+        begin
+        frmentradaserrada.DBGrid2.Visible  := true;
+        frmentradaserrada.DBGrid3.Visible  := false;
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        frmentradaserrada.BitBtn115.Enabled := true;
+        close;
+        end;
+end
+else
+tipo.SetFocus;
+end
+end;
+
+procedure TfrmEntradaSerradaProdutos.JGClick(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var total, total1, total2, total3, total4, total5, total6 : Real;
+begin
+if tipo.Text = 'JG' then
+begin
+	if ESSENCIA.Text='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0,00' then
+   	begin
+         Application.MessageBox('Quantidade de Peças deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+	if COMP.Text='0,00' then
+   	begin
+         Application.MessageBox('Comprimento deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         COMP.SetFocus;
+    end
+    else
+    begin
+	if LARG.Text='0,000' then
+   	begin
+         Application.MessageBox('Largura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         LARG.SetFocus;
+    end
+    else
+    begin
+	if EXP.Text='0,000' then
+   	begin
+         Application.MessageBox('Expessura deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         EXP.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+    end
+    else
+    begin
+	if VALVENDA.Text='0,00' then
+   	begin
+     //    Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+       //  VALVENDA.SetFocus;
+
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+    end;
+
+if (quantidade1.Text <> '0,00') and(ESSENCIA.Text <> '') and (ESSENCIATIPO.Text <> '') and (comp.Text <> '0,00')and (LARG.Text <> '0,000') and(EXP.Text <> '0,000')and (VALUNITARIO.Text <> '0,00')and(VALVENDAM3.Text <> '0,00') then //and(VALVENDA.Text <> '0,00')
+begin
+if dbedit2.Text = '' then
+begin
+dbedit10.Text := '0';
+end
+else
+begin
+if dbedit2.Text <> '' then
+begin
+dbedit10.Text := '1';
+end;
+end;
+DM.TESDISCRIMINACAO['QTDEM2'] :='0';
+DM.TESDISCRIMINACAO['QTDEML'] := '0';
+
+DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (DBEDIT5.Text)+ ' and CODIGOPRODUTO = ' + (DBEDIT9.Text) + 'and LARGURA = ' + (EDIT2.Text)+ 'and EXPESSURA = ' + (EDIT3.Text);
+DM.TESTOQUE.Filtered := True;
+DM.TESTOQUE.Open;
+
+If Application.MessageBox('Confirma Lançamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+edit8.Text := quantidade1.Text;
+edit9.Text := essencia.Text;
+edit10.Text := essenciatipo.Text;
+edit4.Text := comp.Text;
+edit5.Text := larg.Text;
+edit6.Text := exp.Text;
+edit7.Text := valunitario.Text;
+edit11.Text := VALVENDAM3.Text;
+edit12.Text := VALVENDA.Text;
+
+      if DM.TESTOQUE.RecordCount = 0 then
+      begin
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+
+      DM.TESTOQUE.Append;
+      DM.TESTOQUE['CODIGOESSENCIA']:= DBEDIT5.Text;
+      DM.TESTOQUE['ESSENCIA']:= ESSENCIA.Text;
+      DM.TESTOQUE['ESSENCIATIPO']:= ESSENCIATIPO.Text;
+      DM.TESTOQUE['CODIGOPRODUTO']:= DBEDIT9.Text;
+      DM.TESTOQUE['COMPRIMENTO']:= COMP.Text;
+      DM.TESTOQUE['QUANTIDADE'] := quantidade1.Text;
+      DM.TESTOQUE['LARGURA']:= LARG.Text;
+      DM.TESTOQUE['EXPESSURA']:= EXP.Text;
+      DM.TESTOQUE['TOTALM3']:= VALTOTAL.Text ;
+      DM.TESTOQUE['QTDEM2']:= QTDEM2.Value;
+      DM.TESTOQUE['QTDEML']:= QTDEML.Value;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := FALSE;
+      DM.TESTOQUE.Close;
+      DM.TESDISCRIMINACAO.Post;
+      end
+      else
+      begin
+      if DM.TESTOQUE.RecordCount <> 0 then
+      begin
+      DM.TESTOQUE.Edit;
+
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn8:=0;
+      VN9:=0;
+      VN10:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma4:=0;
+      vsoma5:=0;
+      vsoma6:=0;
+
+      vn1:= quantidade1.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn6:= DM.TESTOQUE['QUANTIDADE'];
+      vn7:= VALTOTAL.Value;
+      vn9:= DM.TESTOQUE['TOTALM3'];
+
+      vsoma1 := vn1* vn5;
+      vsoma4 := DM.TESTOQUE['QUANTIDADE']+ vn1;
+      VSOMA6:= vn9 + vn7;
+
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+      DM.TESTOQUE['QUANTIDADE']:= FloatToStr(vsoma4);
+      DM.TESTOQUE['TOTALM3']:= FloatToStr(vsoma6);
+
+      DM.TESDISCRIMINACAO.Post;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := false;
+      DM.TESTOQUE.Close;
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+      end;
+      end;
+
+
+        If Application.MessageBox('Insere Outro Produto para esta Nota Fiscal?', 'Confirmação',
+        mb_YesNo + mb_ICONQUESTION) = idYes then
+        begin
+        DM.TESDISCRIMINACAO.Append;
+        quantidade1.Text := edit8.Text;
+        essencia.KeyValue  := edit9.text;
+        essenciatipo.KeyValue := edit10.text;
+        comp.Text := edit4.Text;
+        larg.Text := edit5.Text;
+        exp.Text := edit6.Text;
+        valunitario.Text := edit7.Text ;
+        VALVENDAM3.Text := edit11.Text ;
+        VALVENDA.Text := edit12.Text ;
+
+        EDITDATA.Text := frmEntradaSerrada.data.Text;
+        DBEDIT3.Text := frmEntradaSerrada.DBEDit6.Text;
+        DBEDIT4.Text := frmEntradaSerrada.nota.Text;
+        DBEDIT6.Text := frmEntradaSerrada.FORNECEDOR.Text;
+        tipo.SetFocus;
+        end
+        else
+        begin
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        frmentradaserrada.BitBtn115.Enabled := true;
+        close;
+        end;
+end
+else
+tipo.SetFocus;
+end
+end;
+
+procedure TfrmEntradaSerradaProdutos.mcClick(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vn6, vn7, vn8, vn9, vn10, vn11, vn12, vn13, vn14, vn15, vn16, vn17,vn18, vsoma, vsoma1, vsoma2, vsoma3, vsoma4, vsoma5, vsoma6, vsoma7, vsoma8: Real;
+var total, total1, total2, total3, total4, total5, total6 : Real;
+begin
+if tipo.Text  = 'PEÇAS' then
+begin
+	if ESSENCIA.Text='' then
+   	begin
+         Application.MessageBox('Essência deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIA.SetFocus;
+    end
+    else
+    begin
+	if ESSENCIATIPO.Text='' then
+   	begin
+         Application.MessageBox('Produto deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         ESSENCIATIPO.SetFocus;
+    end
+    else
+    begin
+	if quantidade1.Text='0,00' then
+   	begin
+         Application.MessageBox('Quantidade de Peças deve ser informada!', 'Lançamento', mb_Ok + mb_IconInformation);
+         quantidade1.SetFocus;
+    end
+    else
+    begin
+	if VALUNITARIO.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de compra deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALUNITARIO.SetFocus;
+    end
+    else
+    begin
+	if VALVENDAM3.Text='0,00' then
+   	begin
+         Application.MessageBox('Valor de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+         VALVENDAM3.SetFocus;
+   end
+    else
+    begin
+ 	if VALVENDA.Text='0,00' then
+   	begin
+//         Application.MessageBox('Valor padrão de venda deve ser informado!', 'Lançamento', mb_Ok + mb_IconInformation);
+     //    VALVENDA.SetFocus;
+   end
+   else
+    end;
+    end;
+    end;
+    end;
+    end;
+   end;
+
+if (quantidade1.Text <> '0,00') and(ESSENCIA.Text <> '') and (ESSENCIATIPO.Text <> '') and  (VALUNITARIO.Text <> '0,00')and (VALVENDAM3.Text <> '0,00')then //and(VALVENDA.Text <> '0,00') then
+begin
+if dbedit2.Text = '' then
+begin
+dbedit10.Text := '0';
+end
+else
+begin
+if dbedit2.Text <> '' then
+begin
+dbedit10.Text := '1';
+end;
+end;
+
+DM.TESDISCRIMINACAO['QTDEM2'] := '0';
+DM.TESDISCRIMINACAO['QTDEML'] := '0';
+
+DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (DBEDIT5.Text)+ ' and CODIGOPRODUTO = ' + (DBEDIT9.Text) + 'and COMPRIMENTO = ' + (EDIT1.Text)+ 'and LARGURA = ' + (EDIT2.Text)+ 'and EXPESSURA = ' + (EDIT3.Text);
+DM.TESTOQUE.Filtered := True;
+DM.TESTOQUE.Open;
+
+If Application.MessageBox('Confirma Lançamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+edit8.Text := quantidade1.Text ;
+edit9.Text := essencia.Text;
+edit10.Text := essenciatipo.Text;
+edit4.Text := comp.Text;
+edit5.Text := larg.Text;
+edit6.Text := exp.Text;
+edit7.Text := valunitario.Text;
+edit11.Text := VALVENDAM3.Text;
+edit12.Text := VALVENDA.Text;
+
+      if DM.TESTOQUE.RecordCount = 0 then
+      begin
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+
+      DM.TESTOQUE.Append;
+      DM.TESTOQUE['QUANTIDADE']:= quantidade1.Text;
+      DM.TESTOQUE['CODIGOESSENCIA']:= DBEDIT5.Text;
+      DM.TESTOQUE['ESSENCIA']:= ESSENCIA.Text;
+      DM.TESTOQUE['ESSENCIATIPO']:= ESSENCIATIPO.Text;
+      DM.TESTOQUE['CODIGOPRODUTO']:= DBEDIT9.Text;
+      DM.TESTOQUE['COMPRIMENTO']:= COMP.Text;
+      DM.TESTOQUE['LARGURA']:= LARG.Text;
+      DM.TESTOQUE['EXPESSURA']:= EXP.Text;
+      DM.TESTOQUE['TOTALM3']:= VALTOTAL.Value;
+      DM.TESTOQUE['QTDEM2']:= QTDEM2.Value;
+      DM.TESTOQUE['QTDEML']:= QTDEML.Value;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := FALSE;
+      DM.TESTOQUE.Close;
+      DM.TESDISCRIMINACAO.Post;
+      end
+      else
+      begin
+      if DM.TESTOQUE.RecordCount <> 0 then
+      begin
+      DM.TESTOQUE.Edit;
+
+      vn1:=0;
+      vn2:=0;
+      vn3:=0;
+      vn4:=0;
+      vn5:=0;
+      vn6:=0;
+      vn7:=0;
+      vn8:=0;
+
+      vsoma:=0;
+      vsoma1:=0;
+      vsoma2:=0;
+      vsoma3:=0;
+      vsoma4:=0;
+      vsoma5:=0;
+
+      vn1:= quantidade1.Value;
+      vn2:= COMP.Value;
+      vn3:= LARG.Value;
+      vn4:= EXP.Value;
+      vn5:= VALUNITARIO.Value;
+      vn6:= DM.TESTOQUE['QUANTIDADE'];
+      vn7:= VALTOTAL.Value;
+      vn8:= DM.TESTOQUE['TOTALM3'];
+
+      vsoma1 := vn1 * vn5;
+      vsoma4 := DM.TESTOQUE['QUANTIDADE']+ vn1;
+      vsoma3 := vn8+vsoma;
+
+      VALTOTAL.Text := '0,0000';
+      VALTOTAL1.Text := FloatToStr(vsoma1);
+      DM.TESTOQUE['QUANTIDADE']:= FloatToStr(vsoma4);
+      DM.TESTOQUE['TOTALM3']:= '0,0000';
+
+      DM.TESDISCRIMINACAO.Post;
+      DM.TESTOQUE.Post;
+      DM.TESTOQUE.Filtered := false;
+      DM.TESTOQUE.Close;
+
+      SITUACAO.Text := '0';
+      DBEDIT7.Text := '0';
+      end;
+      end;
+
+        If Application.MessageBox('Insere Outro Produto para esta Nota Fiscal?', 'Confirmação',
+        mb_YesNo + mb_ICONQUESTION) = idYes then
+        begin
+        DM.TESDISCRIMINACAO.Append;
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        quantidade1.Text := edit8.Text;
+        essencia.KeyValue  := edit9.text;
+        essenciatipo.KeyValue := edit10.text;
+        comp.Text := edit4.Text;
+        larg.Text := edit5.Text;
+        exp.Text := edit6.Text;
+        valunitario.Text := edit7.Text ;
+        VALVENDAM3.Text := edit11.Text ;
+        VALVENDA.Text := edit12.Text ;
+
+        EDITDATA.Text := frmEntradaSerrada.data.Text;
+        DBEDIT3.Text := frmEntradaSerrada.DBEDit6.Text;
+        DBEDIT4.Text := frmEntradaSerrada.nota.Text;
+        DBEDIT6.Text := frmEntradaSerrada.FORNECEDOR.Text;
+        tipo.SetFocus;
+        end
+        else
+        begin
+        DM.TESTOQUE.Filtered := false;
+        DM.TESTOQUE.Close;
+        frmentradaserrada.BitBtn115.Enabled := true;
+        close;
+        end;
+end
+else
+tipo.SetFocus;
+end
+
+end;
+
+end.

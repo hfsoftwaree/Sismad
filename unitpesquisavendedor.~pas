@@ -1,0 +1,194 @@
+unit unitpesquisavendedor;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Grids, DBGrids, DB, ADODB;
+
+type
+  Tfrmpesquisavendedor = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    Edit1: TEdit;
+    DBGrid1: TDBGrid;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    Bevel1: TBevel;
+    GroupBox2: TGroupBox;
+    ComboBox1: TComboBox;
+    Panel2: TPanel;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmpesquisavendedor: Tfrmpesquisavendedor;
+
+implementation
+
+uses UnitDM, UnitPrincipal, UnitSaidaMadeiras, UnitRSaida1, UnitREntrada1,
+  UnitRepRomaneioSerrada, Unitromaneioserrada, Unitromaneiotoro,
+  UnitRRomaneioToros, Unitconsultaproduto, UnitVenda, UnitRSaida,
+  UnitCredor, unitfrmocorrencia, unitfrmvendacontato;
+
+{$R *.dfm}
+
+procedure Tfrmpesquisavendedor.BitBtn2Click(Sender: TObject);
+begin
+if frmocorrencia = nil then
+else
+if frmocorrencia.Tag = 1 then
+begin
+      frmocorrencia.edit2.Text := '';
+      DM.T_VENDEDOR.Close;
+      Close;
+      frmocorrencia.edit2.SetFocus;
+            frmocorrencia.BitBtn2.Enabled := true;
+      end;
+
+if frmvendacontato = nil then
+else
+if frmvendacontato.Tag = 1 then
+begin
+      DM.T_VENDEDOR.Close;
+      Close;
+      end;
+
+end;
+
+
+procedure Tfrmpesquisavendedor.Edit1Change(Sender: TObject);
+begin
+if edit1.Text = '' then
+begin
+DM.T_VENDEDOR.First;
+end
+else
+if (edit1.Text>='A') and (edit1.Text<='Z') then
+begin
+DM.T_VENDEDOR.Locate('NOMEVENDEDOR',Edit1.text,[lopartialkey,locaseinsensitive]);
+end
+else
+begin
+if (edit1.Text>='0') and (edit1.Text<='9') then
+begin
+DM.T_VENDEDOR.Locate('CODIGOVENDEDOR',Edit1.text,[lopartialkey,locaseinsensitive]);
+end
+END;
+end;
+
+procedure Tfrmpesquisavendedor.Edit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+   bitBtn1.Click;
+         Key:=#0;
+end;
+
+procedure Tfrmpesquisavendedor.FormShow(Sender: TObject);
+begin
+frmPrincipal.EvKeyNavigator1.Active := False;
+DM.T_VENDEDOR.Open;
+Edit1.SetFocus;
+Edit1.Clear;
+DM.T_VENDEDOR.Last;
+Panel2.Caption := '' + intTostr(DM.T_VENDEDOR.RecordCount);
+DM.T_VENDEDOR.IndexName := ('NOMEVENDEDOR');
+DM.T_VENDEDOR.First;
+end;
+
+procedure Tfrmpesquisavendedor.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+frmPrincipal.EvKeyNavigator1.Active := True;
+end;
+
+procedure Tfrmpesquisavendedor.ComboBox1Change(Sender: TObject);
+begin
+if ComboBox1.ItemIndex = 0 then
+begin
+DM.T_VENDEDOR.IndexName := ('NOMEVENDEDOR');
+end;
+
+begin
+if ComboBox1.ItemIndex = 1 then
+begin
+DM.T_VENDEDOR.IndexName := ('CODIGOVENDEDOR');
+end;
+end;
+end;
+
+procedure Tfrmpesquisavendedor.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+   bitBtn1.Click;
+end;
+
+procedure Tfrmpesquisavendedor.BitBtn1Click(Sender: TObject);
+begin
+if frmocorrencia = nil then
+else
+if frmocorrencia.Tag = 1 then
+begin
+      frmocorrencia.DBEDIT5.Text := DM.T_VENDEDOR['NOMEVENDEDOR'];
+      frmocorrencia.edit2.Text := DM.T_VENDEDOR['CODIGOVENDEDOR'];
+      frmocorrencia.dbedit18.Text := DM.T_VENDEDOR['CODIGOVENDEDOR'];
+      frmocorrencia.DBCOMBOBOX1.SetFocus;
+      frmocorrencia.BitBtn2.Enabled := true;
+      Close;
+      end;
+
+if frmvendacontato = nil then
+else
+if frmvendacontato.Tag = 1 then
+begin
+      frmvendacontato.DBEDIT5.Text := DM.T_VENDEDOR['NOMEVENDEDOR'];
+      frmvendacontato.edit2.Text := DM.T_VENDEDOR['CODIGOVENDEDOR'];
+      frmvendacontato.dbedit18.Text := DM.T_VENDEDOR['CODIGOVENDEDOR'];
+      frmvendacontato.DBCOMBOBOX1.SetFocus;
+      frmvendacontato.BitBtn2.Enabled := true;
+      Close;
+      end;
+end;
+
+procedure Tfrmpesquisavendedor.BitBtn3Click(Sender: TObject);
+begin
+frmPrincipal.EvKeyNavigator1.Active := true;
+self.Tag := 1;
+Application.CreateForm(TfrmCredor, frmCredor);
+frmcredor.BitBtn9.Visible := true;
+frmcredor.BitBtn3.Visible := false;
+frmCREDOR.ShowModal;
+frmcredor.Free;
+end;
+
+procedure Tfrmpesquisavendedor.Edit1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if key = VK_DOWN then
+dbgrid1.SetFocus;
+end;
+
+procedure Tfrmpesquisavendedor.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+ if key = VK_BACK then
+edit1.SetFocus;
+end;
+
+end.

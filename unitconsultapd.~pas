@@ -1,0 +1,315 @@
+unit unitconsultapd;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, EDBNum, DBCtrls, ExtCtrls, Buttons, DB,
+  IBCustomDataSet, IBTable, jpeg, Gauges, EDateEd, Grids, DBGrids;
+
+type
+  Tfrmconsultapd = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Bevel2: TBevel;
+    ESTOQUE: TLabel;
+    Bevel1: TBevel;
+    GroupBox1: TGroupBox;
+    Essencia: TDBLookupComboBox;
+    BitBtn1: TBitBtn;
+    BitBtn3: TBitBtn;
+    Tipo: TRadioGroup;
+    Edit1: TEdit;
+    Image1: TImage;
+    GroupBox2: TGroupBox;
+    Edit2: TEdit;
+    produto: TDBLookupComboBox;
+    Gauge2: TGauge;
+    DBGrid1: TDBGrid;
+    Label2: TLabel;
+    pecas: TLabel;
+    procedure TipoClick(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure EssenciaEnter(Sender: TObject);
+    procedure produtoClick(Sender: TObject);
+    procedure DBLookupComboBox1Enter(Sender: TObject);
+    procedure EssenciaClick(Sender: TObject);
+    procedure Panel2Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmconsultapd: Tfrmconsultapd;
+
+implementation
+
+uses UnitDM, UnitPrincipal, UnitCalculator;
+
+{$R *.dfm}
+procedure Tfrmconsultapd.TipoClick(Sender: TObject);
+begin
+   case (Tipo.ItemIndex) of
+     0: Begin
+produto.KeyValue := ' ';
+essencia.KeyValue := ' ';
+            DM.TsubProdutos.close;
+            DM.TsubProdutos.Open;
+            DM.TsubProdutos.IndexFieldNames := 'NOMEGRAU';
+            dm.TSUBPRODUTOS.Last;
+            DM.TEssencia.close;
+            DM.TEssencia.Open;
+            DM.TEssencia.IndexFieldNames := 'ESSENCIA';
+            dm.TEssencia.Last;
+            Produto.Enabled := True;
+            Essencia.Enabled := True;
+        end;
+     1: Begin
+produto.KeyValue := ' ';
+essencia.KeyValue := ' ';
+            DM.TsubProdutos.close;
+            DM.TsubProdutos.Open;
+            DM.TsubProdutos.IndexFieldNames := 'NOMEGRAU';
+            dm.TSUBPRODUTOS.Last;
+            DM.TEssencia.close;
+            DM.TEssencia.Open;
+            DM.TEssencia.IndexFieldNames := 'ESSENCIA';
+            dm.TEssencia.Last;
+            Produto.Enabled := True;
+            Essencia.Enabled := False;
+        end;
+     2: Begin
+            DM.TsubProdutos.close;
+            DM.TEssencia.close;
+            Produto.Enabled := False;
+            Essencia.Enabled := False;
+        end;
+   end
+end;
+
+procedure Tfrmconsultapd.BitBtn3Click(Sender: TObject);
+var total, total1, total2, total3, total4, total5, total6  : Real;
+begin
+   if Tipo.ItemIndex = -1 then
+      Begin
+          Application.MessageBox('Tipo de Consulta deve ser informada!', 'Consulta', mb_Ok + mb_IconInformation);
+      end;
+
+if (Tipo.ItemIndex <> -1) then
+begin
+   case (Tipo.ItemIndex) of
+      0: Begin
+
+    If Produto.Text = '' then
+      Begin
+          Application.MessageBox('Tipo de Produto deve ser informado!', 'Consulta', mb_Ok + mb_IconInformation);
+          produto.SetFocus;
+      end
+      else
+      begin
+    If essencia.Text = '' then
+      Begin
+          Application.MessageBox('Essência deve ser informada!', 'Consulta', mb_Ok + mb_IconInformation);
+          essencia.SetFocus;
+      end
+      end;
+
+    if (Produto.Text <> '')and (essencia.Text <> '') then
+    begin
+        EDIT2.Text := DM.TSUBPRODUTOS['GRAUIND'];
+        Edit1.Text := DM.TEssencia['CODIGO'];
+        DM.TESDISCRIMINACAO.Filtered := False;
+        DM.TESDISCRIMINACAO.Close;
+        DM.TESDISCRIMINACAO.Filter := 'CODIGOESSENCIA = ' + (edit1.Text)+ 'and CODIGOPRODUTO = ' + (Edit2.Text)+ 'and OBSCODIGO = ' + '1';
+        DM.TESDISCRIMINACAO.Filtered := True;
+        DM.TESDISCRIMINACAO.Open;
+
+        if DM.TESDISCRIMINACAO.RecordCount = 0 then
+        begin
+        PECAS.Caption := '0';
+        ESTOQUE.Caption := '0,0000';
+        end
+        else
+        begin
+        if DM.TESDISCRIMINACAO.RecordCount <> 0 then
+        begin
+        total3 := 0;
+        total4 := 0;
+        gauge2.Visible := true;
+        gauge2.MaxValue := 0;
+        Gauge2.MaxValue:= DM.TESDISCRIMINACAO.RecordCount;
+        DM.TESDISCRIMINACAO.Last;
+        DM.TESDISCRIMINACAO.First;
+        if not DM.TESDISCRIMINACAO.Eof  then
+        repeat
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total3 := DM.TESDISCRIMINACAO['TOTALM3'] + total3;
+        total4 := DM.TESDISCRIMINACAO['QUANTIDADE'] + total4;
+        DM.TESDISCRIMINACAO.Next;
+        until DM.TESDISCRIMINACAO.Eof;
+        end;
+        ESTOQUE.Caption := FormatCurr('#0.0000',total3);
+        pecas.Caption := FormatCurr('',total4);
+        gauge2.Visible := false;
+        end;
+        end;
+        end;
+
+      1: Begin
+    If Produto.Text = '' then
+      Begin
+          Application.MessageBox('Tipo de Produto deve ser informado!', 'Consulta', mb_Ok + mb_IconInformation);
+          produto.SetFocus;
+      end;
+
+    if (Produto.Text <> '') then
+    begin
+        EDIT2.Text := DM.TSUBPRODUTOS['GRAUIND'];
+        DM.TESDISCRIMINACAO.Filtered := False;
+        DM.TESDISCRIMINACAO.Close;
+        DM.TESDISCRIMINACAO.Filter := 'CODIGOPRODUTO = ' + (Edit2.Text)+ 'and OBSCODIGO = ' + '1';
+        DM.TESDISCRIMINACAO.Filtered := True;
+        DM.TESDISCRIMINACAO.Open;
+
+        if DM.TESDISCRIMINACAO.RecordCount = 0 then
+        begin
+        PECAS.Caption := '0';
+        estoque.Caption := '0,0000';
+        end
+        else
+        begin
+        if DM.TESDISCRIMINACAO.RecordCount <> 0 then
+        begin
+        total3 := 0;
+        total5 := 0;
+        gauge2.Visible := true;
+        gauge2.MaxValue := 0;
+        Gauge2.MaxValue:= DM.TESDISCRIMINACAO.RecordCount;
+        DM.TESDISCRIMINACAO.Last;
+        DM.TESDISCRIMINACAO.First;
+        if not DM.TESDISCRIMINACAO.Eof  then
+        repeat
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total3 := DM.TESDISCRIMINACAO['TOTALM3'] + total3;
+        total5 := DM.TESDISCRIMINACAO['QUANTIDADE'] + total5;
+        DM.TESDISCRIMINACAO.Next;
+        until DM.TESDISCRIMINACAO.Eof;
+        end;
+        estoque.Caption := FormatCurr('#0.0000',total3);
+        pecas.Caption := FormatCurr('',total5);
+        gauge2.Visible := false;
+        end;
+        end;
+        end;
+
+     2: Begin
+        DM.TESDISCRIMINACAO.Filtered := False;
+        DM.TESDISCRIMINACAO.Close;
+        DM.TESDISCRIMINACAO.Filter := 'OBSCODIGO = ' + '1';
+        DM.TESDISCRIMINACAO.Filtered := True;
+        DM.TESDISCRIMINACAO.Open;
+
+        if DM.TESDISCRIMINACAO.RecordCount = 0 then
+        begin
+        PECAS.Caption := '0';
+        estoque.Caption := '0,0000';
+        end
+        else
+        begin
+        if DM.TESDISCRIMINACAO.RecordCount <> 0 then
+        begin
+        total3 := 0;
+        total6 := 0;
+        gauge2.Visible := true;
+        gauge2.MaxValue := 0;
+        Gauge2.MaxValue:= DM.TESDISCRIMINACAO.RecordCount;
+        DM.TESDISCRIMINACAO.Last;
+        DM.TESDISCRIMINACAO.First;
+        if not DM.TESDISCRIMINACAO.Eof  then
+        repeat
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total3 := DM.TESDISCRIMINACAO['TOTALM3'] + total3;
+        total6 := DM.TESDISCRIMINACAO['QUANTIDADE'] + total6;
+        DM.TESDISCRIMINACAO.Next;
+        until DM.TESDISCRIMINACAO.Eof;
+        end;
+        estoque.Caption := FormatCurr('#0.0000',total3);
+        pecas.Caption := FormatCurr('',total6);
+        gauge2.Visible := false;
+        end;
+        end;
+     end;
+end;
+end;
+
+procedure Tfrmconsultapd.BitBtn1Click(Sender: TObject);
+begin
+Tipo.ItemIndex := -1;
+ESTOQUE.Caption := '';
+pecas.Caption := '';
+produto.Enabled := false;
+produto.ListFieldIndex := 0;
+essencia.ListFieldIndex := 0;
+Edit1.Clear;
+Edit2.Clear;
+Close;
+end;
+
+
+
+
+
+procedure Tfrmconsultapd.EssenciaEnter(Sender: TObject);
+begin
+ESSENCIA.DropDown;
+end;
+
+procedure Tfrmconsultapd.produtoClick(Sender: TObject);
+begin
+EDIT2.Text := DM.TProduto['GRAUIND'];
+end;
+
+procedure Tfrmconsultapd.DBLookupComboBox1Enter(Sender: TObject);
+begin
+Produto.DropDown;
+end;
+
+procedure Tfrmconsultapd.EssenciaClick(Sender: TObject);
+begin
+edit1.Text := DM.TEssencia['CODIGO'];
+end;
+
+
+procedure Tfrmconsultapd.Panel2Click(Sender: TObject);
+begin
+self.Visible := false;
+end;
+
+
+procedure Tfrmconsultapd.FormDestroy(Sender: TObject);
+begin
+DM.QEssencia.Close;
+DM.TEssencia.Cancel;
+DM.TEssencia.Close;
+DM.TsubPRODUTOs.Close;
+DM.TSaida_Discriminacao.Close;
+DM.TESDISCRIMINACAO.Close;
+
+end;
+
+procedure Tfrmconsultapd.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (Shift = [ssCtrl]) and (Key = 46) Then 
+KEY := 0; 
+
+end;
+
+end.

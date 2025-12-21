@@ -1,0 +1,151 @@
+unit UnitRepfechamentovenda;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QuickRpt, QRCtrls, ExtCtrls, StdCtrls, DB, IBCustomDataSet,
+  IBTable, IBDatabase, IBQuery;
+
+type
+  TRepFechamentosaida = class(TForm)
+    QuickRep1: TQuickRep;
+    QRBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRLabel1: TQRLabel;
+    NRELATORIO: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRDBText2: TQRDBText;
+    QRLabel3: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRBand2: TQRBand;
+    QRShape5: TQRShape;
+    QRSysData2: TQRSysData;
+    QRSysData3: TQRSysData;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRLabel9: TQRLabel;
+    PF: TQRLabel;
+    PI: TQRLabel;
+    DENTRADA: TDataSource;
+    TENTRADA: TIBTable;
+    QRLabel28: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRLabel30: TQRLabel;
+    QRDBText17: TQRDBText;
+    TENTRADACODIGOLANCAMENTO: TIntegerField;
+    TENTRADACODIGOCLIENTE: TFloatField;
+    TENTRADANF: TFloatField;
+    TENTRADADATA: TDateTimeField;
+    TENTRADAESSENCIA: TIBStringField;
+    TENTRADAQTDE_PRODUTOS: TFloatField;
+    TENTRADATOTALM3: TFloatField;
+    TENTRADAVAL_TOT_PRODUTOS: TFloatField;
+    TENTRADAFORMAPAGAMENTO: TIBStringField;
+    TENTRADADESCONTO: TFloatField;
+    TENTRADAVAL_TOT_NOTA: TFloatField;
+    TENTRADAPARCELA1: TDateTimeField;
+    TENTRADAPARCELA2: TDateTimeField;
+    TENTRADAMOEDA: TIBStringField;
+    TENTRADANUMEROPARCELAS: TFloatField;
+    TENTRADAINTERVALOPARCELAS: TFloatField;
+    TENTRADACODIGOESSENCIA: TFloatField;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    TENTRADATIPOPAGAMENTO: TIBStringField;
+    TENTRADAVALORENTRADA: TFloatField;
+    TENTRADACODIGOVENDEDOR: TIntegerField;
+    TENTRADANOMEVENDEDOR: TIBStringField;
+    total2: TQRLabel;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    QRLabel14: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    TOTAL1: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    DataSource1: TDataSource;
+    Query1: TIBQuery;
+    TENTRADAQTDEM2: TFloatField;
+    TENTRADAQTDEML: TFloatField;
+    TENTRADATIPOCODIGO: TIBStringField;
+    TENTRADATIPOLANCAMENTO: TIBStringField;
+    TENTRADANOMECLIENTE: TIBStringField;
+    TENTRADAFECHAMENTOTIPO: TIBStringField;
+    TENTRADAFECHAMENTODESCRICAO: TIBStringField;
+    TENTRADAPRAZO: TIBStringField;
+    TENTRADAFONECONTATO: TIBStringField;
+    TENTRADAFONECONTATO1: TIBStringField;
+    TENTRADAENTREGACODIGO: TIBStringField;
+    TENTRADAENTREGASTATUS: TIBStringField;
+    TENTRADAENTREGADATA: TDateTimeField;
+    TENTRADAENTREGAPROGRAMADA: TIBStringField;
+    TENTRADAENTREGAPROGDATA: TDateTimeField;
+    TENTRADAENTREGAPROGHORA: TTimeField;
+    TENTRADAOBS: TIBStringField;
+    TENTRADAPRAZOENTREGA: TIBStringField;
+    TENTRADAOUTRASDESPESAS: TFloatField;
+    TENTRADAVALORFRETE: TFloatField;
+    TENTRADAVALORDESCONTO: TFloatField;
+    TENTRADADATAPEDIDO: TDateTimeField;
+    TENTRADAFECHAMENTO_MOTIVO: TMemoField;
+    TENTRADATIPOPAGAMENTO1: TIBStringField;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RepFechamentosaida: TRepFechamentosaida;
+
+implementation
+
+uses UnitDM;
+
+
+
+
+
+{$R *.dfm}
+
+
+
+
+
+procedure TRepFechamentosaida.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+TENTRADA.Filtered  := false;
+TENTRADA.Close;
+DM.QManutencao.Close;
+end;
+
+procedure TRepFechamentosaida.FormShow(Sender: TObject);
+begin
+//DM.QManutencao.Open; 
+end;
+
+end.

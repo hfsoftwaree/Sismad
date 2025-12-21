@@ -1,0 +1,356 @@
+unit Unitajustarestoque;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, EDBNum, DBCtrls, ExtCtrls, Buttons, DB,
+  IBCustomDataSet, IBTable, jpeg, Gauges, Grids, DBGrids, ToolEdit,
+  CurrEdit, TFlatMaskEditUnit, RxLookup, SSBaseXP, SSEdit, ENumEd;
+
+type
+  Tfrmajusteestoque = class(TForm)
+    Panel1: TPanel;
+    Bevel2: TBevel;
+    GroupBox1: TGroupBox;
+    Essencia: TDBLookupComboBox;
+    BitBtn1: TBitBtn;
+    BitBtn3: TBitBtn;
+    Edit1: TEdit;
+    Image1: TImage;
+    GroupBox2: TGroupBox;
+    Edit2: TEdit;
+    produto: TDBLookupComboBox;
+    GroupBox3: TGroupBox;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label6: TLabel;
+    GroupBox4: TGroupBox;
+    GroupBox5: TGroupBox;
+    TOTALM3: TEvDBNumEdit;
+    Edit3: TEdit;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Label1: TLabel;
+    comp: TEditCurrencyXP;
+    larg: TEditCurrencyXP;
+    exp: TEditCurrencyXP;
+    BitBtn2: TBitBtn;
+    totalpecas: TEvDBNumEdit;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure EssenciaEnter(Sender: TObject);
+    procedure produtoClick(Sender: TObject);
+    procedure DBLookupComboBox1Enter(Sender: TObject);
+    procedure EssenciaClick(Sender: TObject);
+    procedure Panel2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure comp2KeyPress(Sender: TObject; var Key: Char);
+    procedure produtoEnter(Sender: TObject);
+    procedure COMPChange(Sender: TObject);
+    procedure LARGChange(Sender: TObject);
+    procedure EXPChange(Sender: TObject);
+    procedure TOTALPECASExit(Sender: TObject);
+    procedure TOTALM3Exit(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure totalpecasEnter(Sender: TObject);
+    procedure TOTALM3Enter(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmajusteestoque: Tfrmajusteestoque;
+
+implementation
+
+uses UnitDM, UnitPrincipal, UnitCalculator;
+
+{$R *.dfm}
+
+
+
+procedure Tfrmajusteestoque.BitBtn3Click(Sender: TObject);
+var total, total1, total2, total3, total4, total5, total6  : Real;
+begin
+    If essencia.Text = '' then
+      Begin
+          Application.MessageBox('Essência deve ser informada!', 'Consulta', mb_Ok + mb_IconInformation);
+          essencia.SetFocus;
+      end
+      else
+      begin
+    If Produto.Text = '' then
+      Begin
+          Application.MessageBox('Tipo de Produto deve ser informado!', 'Consulta', mb_Ok + mb_IconInformation);
+          produto.SetFocus;
+      end
+      end;
+
+    if (Produto.Text <> '')and (essencia.Text <> '') then
+    begin
+        EDIT2.Text := DM.TSUBPRODUTOS['GRAUIND'];
+        Edit1.Text := DM.TEssencia['CODIGO'];
+
+        if (comp.Text <> '0,00')and (larg.Text <>'0,000')and (exp.Text <>'0,000') then
+        begin
+        DM.TESTOQUE.Filtered := False;
+        DM.TESTOQUE.Close;
+        DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (edit1.Text)+ 'and CODIGOPRODUTO = ' + (Edit2.Text)+ 'and COMPRIMENTO = ' + (edit3.Text)+ 'and LARGURA = ' + (edit4.Text)+ 'and EXPESSURA = ' + (edit5.Text);
+        DM.TESTOQUE.Filtered := True;
+        DM.TESTOQUE.Open;
+
+        if DM.TESTOQUE.RecordCount = 0 then
+        begin
+        DM.TESTOQUE.Close;
+        Application.MessageBox('Produto não localizado para os critérios informados, Verifique!', 'Consulta', mb_Ok + mb_IconInformation);
+        essencia.SetFocus;
+        end
+        else
+        begin
+        if DM.TESTOQUE.RecordCount <> 0 then
+        begin
+            if totalpecas.Text = '0' then
+            begin
+            dm.TESTOQUE.Edit;
+            totalm3.ReadOnly := false;
+            totalm3.TabStop := true;
+            totalm3.SetFocus;
+            totalm3.SelectAll;
+            end
+            else
+            begin
+            if totalpecas.Text <> '0' then
+            begin
+            dm.TESTOQUE.Edit;
+            totalpecas.ReadOnly := false;
+            totalpecas.TabStop := true;
+            totalpecas.SetFocus;
+            totalpecas.SelectAll;
+            end
+        end
+
+end;
+END;
+end;
+        if (comp.Text = '0,00')and (larg.Text ='0,000')and (exp.Text ='0,000') then
+        begin
+        DM.TESTOQUE.Filtered := False;
+        DM.TESTOQUE.Close;
+        DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (edit1.Text)+ 'and CODIGOPRODUTO = ' + (Edit2.Text);
+        DM.TESTOQUE.Filtered := True;
+        DM.TESTOQUE.Open;
+
+        if DM.TESTOQUE.RecordCount = 0 then
+        begin
+        DM.TESTOQUE.Close;
+        Application.MessageBox('Produto não localizado para os critérios informados, Verifique!', 'Consulta', mb_Ok + mb_IconInformation);
+        essencia.SetFocus;
+        end
+        else
+        begin
+        if DM.TESTOQUE.RecordCount <> 0 then
+        begin
+            if totalpecas.Text = '0' then
+            begin
+            dm.TESTOQUE.Edit;
+            totalm3.ReadOnly := false;
+            totalm3.TabStop := true;
+            totalm3.SetFocus;
+            totalm3.SelectAll;
+            end
+            else
+            begin
+            if totalpecas.Text <> '0' then
+            begin
+            dm.TESTOQUE.Edit;
+            totalpecas.ReadOnly := false;
+            totalpecas.TabStop := true;
+            totalpecas.SetFocus;
+            totalpecas.SelectAll;
+            end
+            end;
+end;
+end;
+end;
+end;
+end;
+
+procedure Tfrmajusteestoque.BitBtn1Click(Sender: TObject);
+begin
+essencia.KeyValue := '';
+produto.KeyValue := '';
+DM.TEssencia.Cancel;
+Edit1.Clear;
+Edit2.Clear;
+Close;
+end;
+
+
+
+
+
+procedure Tfrmajusteestoque.EssenciaEnter(Sender: TObject);
+begin
+ESSENCIA.DropDown;
+end;
+
+procedure Tfrmajusteestoque.produtoClick(Sender: TObject);
+begin
+//EDIT2.Text := DM.TProduto['GRAUIND'];
+
+end;
+
+procedure Tfrmajusteestoque.DBLookupComboBox1Enter(Sender: TObject);
+begin
+Produto.DropDown;
+end;
+
+procedure Tfrmajusteestoque.EssenciaClick(Sender: TObject);
+begin
+edit1.Text := DM.TEssencia['CODIGO'];
+end;
+
+
+procedure Tfrmajusteestoque.Panel2Click(Sender: TObject);
+begin
+self.Visible := false;
+end;
+
+
+
+procedure Tfrmajusteestoque.FormShow(Sender: TObject);
+begin
+ DM.TsubProdutos.Open;
+ DM.TsubProdutos.IndexFieldNames := 'NOMEGRAU';
+ dm.TSUBPRODUTOS.Last;
+ DM.TEssencia.Open;
+ DM.TEssencia.IndexFieldNames := 'ESSENCIA';
+ DM.TEssencia.Last;
+ essencia.SetFocus;
+end;
+
+procedure Tfrmajusteestoque.comp2KeyPress(Sender: TObject;
+  var Key: Char);
+begin
+if Key in [','] then
+Key := '.';
+end;
+
+procedure Tfrmajusteestoque.produtoEnter(Sender: TObject);
+begin
+produto.DropDown;
+end;
+
+procedure Tfrmajusteestoque.COMPChange(Sender: TObject);
+begin
+edit3.Text := comp.Text;
+edit3.Text := StringReplace(edit3.Text, ',', '.', []);
+end;
+
+procedure Tfrmajusteestoque.LARGChange(Sender: TObject);
+begin
+edit4.Text := larg.Text;
+edit4.Text := StringReplace(edit4.Text, ',', '.', []);
+end;
+
+procedure Tfrmajusteestoque.EXPChange(Sender: TObject);
+begin
+edit5.Text := exp.Text;
+edit5.Text := StringReplace(edit5.Text, ',', '.', []);
+end;
+
+procedure Tfrmajusteestoque.TOTALPECASExit(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vsoma: Real;
+begin
+frmprincipal.EvFocusColor1.ChangeColor := false;
+frmprincipal.EvFocusColor1.ChangeFont := false;
+totalpecas.ReadOnly := true;
+totalpecas.TabStop := false;
+
+  vn1:=0;
+  vn2:=0;
+  vn3:=0;
+  vn4:=0;
+
+  vsoma:=0;
+
+  vn1:= totalpecas.Value;
+  vn2:= comp.Value;
+  vn3:= larg.Value;
+  vn4:= exp.Value;
+
+  vsoma := vn1 * vn2 * vn3 * vn4;
+
+  totalm3.Text := FloatToStr(vsoma);
+bitbtn2.SetFocus;
+end;
+
+procedure Tfrmajusteestoque.TOTALM3Exit(Sender: TObject);
+begin
+frmprincipal.EvFocusColor1.ChangeColor := false;
+frmprincipal.EvFocusColor1.ChangeFont := false;
+totalm3.ReadOnly := true;
+totalm3.TabStop := false;
+bitbtn2.SetFocus;
+end;
+
+procedure Tfrmajusteestoque.BitBtn2Click(Sender: TObject);
+var vn1, vn2, vn3, vn4, vn5, vsoma: Real;
+begin
+if (totalpecas.Text = '0')and (comp.Text = '0,00')and (larg.Text = '0,000')and (exp.Text = '0,000') then
+begin
+    If Application.MessageBox('Confirma Alteração?', 'Confirmação',
+    mb_YesNo + mb_ICONQUESTION) = idYes then
+    begin
+    dm.TESTOQUE.Edit;
+    dm.TESTOQUE.Post;
+    end;
+    end;
+
+if (totalpecas.Text <> '0')and (comp.Text = '0,00')and (larg.Text = '0,000')and (exp.Text = '0,000') then
+begin
+    If Application.MessageBox('Confirma Alteração?', 'Confirmação',
+    mb_YesNo + mb_ICONQUESTION) = idYes then
+    begin
+    dm.TESTOQUE.Post;
+    end;
+    end;
+
+if (totalpecas.Text <> '0')and (comp.Text <> '0,00')and (larg.Text <> '0,000')and (exp.Text <> '0,000') then
+begin
+If Application.MessageBox('Confirma Alteração ?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+  dm.TESTOQUE.Post;
+  end
+  end;
+end;
+
+
+procedure Tfrmajusteestoque.FormDestroy(Sender: TObject);
+begin
+DM.TEssencia.Close;
+DM.TSUBPRODUTOS.Cancel;
+DM.TSUBPRODUTOS.Close;
+DM.TESTOQUE.Filtered := FALSE;
+DM.TESTOQUE.Close;
+end;
+
+procedure Tfrmajusteestoque.totalpecasEnter(Sender: TObject);
+begin
+//frmprincipal.EvFocusColor1.ChangeColor := false;
+frmprincipal.EvFocusColor1.ChangeFont := false;
+end;
+
+procedure Tfrmajusteestoque.TOTALM3Enter(Sender: TObject);
+begin
+//frmprincipal.EvFocusColor1.ChangeColor := false;
+frmprincipal.EvFocusColor1.ChangeFont := false;
+end;
+
+end.

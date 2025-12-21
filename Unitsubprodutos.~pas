@@ -1,0 +1,404 @@
+unit Unitsubprodutos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, XP_MenuBar, StdCtrls, DBCtrls, Mask,
+  EDBZero, ExtCtrls, Buttons, Grids, DBGrids, DB, IBCustomDataSet, IBTable,
+  EChkCPF, EChkCNPJ, EDBNum, CJVLed;
+
+type
+  Tfrmsubprodutos = class(TForm)
+    Image1: TImage;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Panel1: TPanel;
+    DBEdit2: TDBEdit;
+    DBEdit1: TDBEdit;
+    Panel2: TPanel;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    DBNavigator1: TDBNavigator;
+    BitBtn4: TBitBtn;
+    BitBtn6: TBitBtn;
+    BitBtn7: TBitBtn;
+    Panel3: TPanel;
+    Label1: TLabel;
+    GroupBox1: TGroupBox;
+    Edit1: TEdit;
+    DBGrid1: TDBGrid;
+    Panel17: TPanel;
+    ImageList1: TImageList;
+    Button1: TButton;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Label2: TLabel;
+    comp: TEvDBNumEdit;
+    larg: TEvDBNumEdit;
+    exp: TEvDBNumEdit;
+    INATIVO: TDBCheckBox;
+    Panel7: TPanel;
+    led: TCJVLed;
+    Button2: TButton;
+    procedure BitBtn4Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn7Click(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+    procedure TabSheet1Show(Sender: TObject);
+    procedure DBEdit11Exit(Sender: TObject);
+    procedure TabSheet2Show(Sender: TObject);
+    procedure DBEdit2Exit(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure expExit(Sender: TObject);
+    procedure largExit(Sender: TObject);
+    procedure compExit(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure INATIVOClick(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure Edit1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Button2Click(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmsubprodutos: Tfrmsubprodutos;
+
+implementation
+
+uses UnitDM, UnitPrincipal;
+
+
+{$R *.dfm}
+
+procedure Tfrmsubprodutos.BitBtn4Click(Sender: TObject);
+begin
+if frmprincipal.incluir.Caption = 'False' then
+begin
+Application.MessageBox('Você não tem permissão para executar esta ação!', 'Informação', mb_Ok + mb_IconInformation);
+end
+else
+begin
+DM.TSUBProdutos.Cancel;
+BitBtn4.Enabled := False;
+PageControl1.ActivePage := TabSheet1;
+BitBtn6.Enabled := False;
+BitBtn3.Enabled := False;
+DM.TSUBProdutos.Append;
+DBEdit2.SetFocus;
+end;
+end;
+
+procedure Tfrmsubprodutos.BitBtn1Click(Sender: TObject);
+begin
+if frmprincipal.alterar.Caption = 'False' then
+begin
+Application.MessageBox('Você não tem permissão para executar esta ação!', 'Informação', mb_Ok + mb_IconInformation);
+end
+else
+begin
+	if DBEdit2.Text='' then
+   	begin
+         Application.MessageBox('Sub-Produto deve ser informado!', 'Cadastro', mb_Ok + mb_IconInformation);
+         DBEdit2.SetFocus;
+    end;
+
+if (DBEdit2.Text <> '')  then
+begin
+If Application.MessageBox('Confirma a Inclusão/Alteração?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+  try
+    if DM.TSUBPRODUTOS['INATIVO_CODIGO'] = null then DM.TSUBPRODUTOS['INATIVO_CODIGO'] := '2';
+    DM.TSUBProdutoS.Post;
+//    DM.TSUBProdutoS.Refresh;
+    If Application.MessageBox('Continua Cadastramento?', 'Confirmação',
+    mb_YesNo + mb_ICONQUESTION) = idYes then DM.TSUBProdutoS.Append
+  except
+    Application.MessageBox('Produto já Cadastrado!', 'Município', mb_Ok + mb_IconExclamation);
+  end;
+  DBEdit2.SetFocus;
+  BitBtn4.Enabled := True;
+  BitBtn6.Enabled := True;
+  BitBtn3.Enabled := True;
+  end
+  else
+  DBEdit2.SetFocus;
+  end
+end;
+end;
+
+procedure Tfrmsubprodutos.BitBtn2Click(Sender: TObject);
+begin
+DM.TSUBProdutos.Cancel;
+BitBtn4.Enabled := True;
+BitBtn6.Enabled := True;
+BitBtn3.Enabled := True;
+DBEdit2.SetFocus;
+end;
+
+procedure Tfrmsubprodutos.BitBtn3Click(Sender: TObject);
+begin
+DM.TsubProdutos.Cancel ;
+Close;
+end;
+
+procedure Tfrmsubprodutos.Edit1Change(Sender: TObject);
+begin
+if edit1.Text = '' then
+begin
+DM.TSUBPRODUTOS.First;
+end
+else
+if (edit1.Text>='A') and (edit1.Text<='Z') then
+begin
+DM.TSUBProdutoS.Locate('NOMEGRAU',Edit1.text,[lopartialkey,locaseinsensitive]);
+end
+else
+begin
+if (edit1.Text>='0') and (edit1.Text<='9') then
+begin
+DM.TSUBProdutoS.Locate('GRAUIND',Edit1.text,[lopartialkey,locaseinsensitive]);
+end;
+end;
+end;
+
+procedure Tfrmsubprodutos.FormShow(Sender: TObject);
+begin
+PageControl1.ActivePage := TabSheet1;
+Label1.Caption := 'Cadastro de Produto(s)';
+DM.TsubProdutos.Close;
+DM.TsubProdutos.Open;
+DM.TsubProdutos.IndexName := ('SUBPRODUTO');
+
+with DM.QEssencia do
+  	begin
+    DM.QEssencia.Close;
+    DM.QEssencia.SQL.Clear ;
+    DM.QEssencia.SQL.Add('select * from ESSENCIA');
+    DM.QEssencia.SQL.Add('ORDER BY ESSENCIA');
+    DM.QEssencia.Open;
+//    DM.QEssencia.Last;
+    end;
+end;
+
+procedure Tfrmsubprodutos.BitBtn7Click(Sender: TObject);
+begin
+BitBtn1.Enabled := True;
+BitBtn2.Enabled := True;
+BitBtn4.Enabled := True;
+Label1.Caption := 'Cadastro de Produto(s)';
+PageControl1.ActivePage := TabSheet1;
+BitBtn7.Visible := False;
+BitBtn6.Visible := True;
+DBEdit2.SetFocus;
+end;
+
+procedure Tfrmsubprodutos.BitBtn6Click(Sender: TObject);
+begin
+if DM.TsubProdutos.RecordCount = 0 then
+begin
+Application.MessageBox('Não hà Produto cadastrados para pesquisa!', 'Pesquisa', mb_Ok + mb_IconInformation);
+DBEdit2.SetFocus;
+end
+else
+begin
+BitBtn1.Enabled := False;
+BitBtn2.Enabled := False;
+BitBtn4.Enabled := False;
+Label1.Caption := 'Pesquisa de Produto(s)';
+PageControl1.ActivePage := TabSheet2;
+BitBtn6.Visible := False;
+BitBtn7.Visible := True;
+Edit1.SetFocus;
+end;
+end;
+
+procedure Tfrmsubprodutos.TabSheet1Show(Sender: TObject);
+begin
+BitBtn1.Enabled := True;
+BitBtn2.Enabled := True;
+BitBtn4.Enabled := True;
+Label1.Caption := 'Cadastro de Produto(s)';
+BitBtn7.Visible := False;
+BitBtn6.Visible := True;
+DBEdit2.SetFocus;
+end;
+
+
+procedure Tfrmsubprodutos.DBEdit11Exit(Sender: TObject);
+begin
+bitbtn1.Click;
+end;
+
+procedure Tfrmsubprodutos.TabSheet2Show(Sender: TObject);
+begin
+BitBtn1.Enabled := False;
+BitBtn2.Enabled := False;
+BitBtn4.Enabled := False;
+Label1.Caption := 'Pesquisa de Produto(s)';
+BitBtn6.Visible := False;
+BitBtn7.Visible := True;
+Edit1.SetFocus;
+end;
+
+
+
+
+procedure Tfrmsubprodutos.DBEdit2Exit(Sender: TObject);
+begin
+BITBTN1.Click;
+end;
+
+procedure Tfrmsubprodutos.Button1Click(Sender: TObject);
+begin
+DM.TSUBPRODUTOS.Delete ;
+end;
+
+
+
+
+procedure Tfrmsubprodutos.expExit(Sender: TObject);
+begin
+if exp.Text = '0,000' then
+begin
+DM.TsubProdutos.edit;
+DM.TSUBPRODUTOS['EXP']:='0,000';
+bitbtn1.Click;
+end
+else
+begin
+if exp.Text > '0,50' then
+begin
+Application.MessageBox('Expessura informada invalido, Verifique!', 'Lançamento', mb_Ok + mb_IconInformation);
+exp.SetFocus;
+end
+else
+bitbtn1.SetFocus;
+end
+end;
+
+procedure Tfrmsubprodutos.largExit(Sender: TObject);
+begin
+if larg.Text = '0,000' then
+begin
+DM.TsubProdutos.edit;
+DM.TSUBPRODUTOS['LARG']:='0,000';
+exit
+end
+else
+begin
+if larg.Text > '1,50' then
+begin
+Application.MessageBox('Largura informada invalido, Verifique!', 'Lançamento', mb_Ok + mb_IconInformation);
+larg.SetFocus;
+end
+end
+end;
+
+procedure Tfrmsubprodutos.compExit(Sender: TObject);
+begin
+if comp.Text = '0,00' then
+begin
+DM.TsubProdutos.edit;
+DM.TSUBPRODUTOS['COMP']:='0,00';
+exit
+end
+else
+begin
+if comp.Text > '9,00' then
+begin
+Application.MessageBox('Comprimento informado invalido, Verifique!', 'Lançamento', mb_Ok + mb_IconInformation);
+comp.SetFocus;
+end
+end
+end;
+
+procedure Tfrmsubprodutos.FormDestroy(Sender: TObject);
+begin
+DM.TsubProdutos.Close;
+    DM.QEssencia.Close;
+end;
+
+procedure Tfrmsubprodutos.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (Shift = [ssCtrl]) and (Key = 46) Then
+KEY := 0;
+
+if Key = VK_BACK then
+edit1.setfocus;
+end;
+
+procedure Tfrmsubprodutos.DBGrid1TitleClick(Column: TColumn);
+var
+  I: Integer;
+begin
+  for I := 0 to DBGrid1.Columns.Count - 1 do
+  DBGrid1.Columns[i].Title.Font.Style := [];
+  dm.TSUBPRODUTOS.IndexFieldNames := Column.FieldName;
+  Column.Title.Font.Style := [fsBold];
+
+end;
+
+procedure Tfrmsubprodutos.INATIVOClick(Sender: TObject);
+begin
+if inativo.Checked = true then led.IsOn := false else led.IsOn := true;
+end;
+
+procedure Tfrmsubprodutos.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn;
+  State: TGridDrawState);
+var
+iCheck: Integer;
+rRect: TRect;
+begin
+if Column.FieldName = 'INATIVO_CODIGO' then
+begin
+DBGrid1.Canvas.FillRect(Rect);
+iCheck := 0;
+if DM.TSUBPRODUTOS.FieldByName('INATIVO_CODIGO').AsString = '1' then
+iCheck := DFCS_CHECKED
+else
+iCheck := 0;
+rRect := Rect;
+InflateRect(rRect,-2,-2);
+DrawFrameControl(DBGrid1.Canvas.Handle,rRect,DFC_BUTTON, DFCS_BUTTONCHECK or iCheck);
+end                     
+end;
+
+procedure Tfrmsubprodutos.Edit1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if Key = VK_DOWN then
+dbgrid1.SetFocus;
+end;
+
+procedure Tfrmsubprodutos.Button2Click(Sender: TObject);
+begin
+    DM.TSUBPRODUTOS.first;
+    repeat
+    DM.TSUBPRODUTOS.edit;
+    DM.TSUBPRODUTOS.FieldByName('INATIVO_CODIGO').AsString := '2';
+    DM.TSUBPRODUTOS.Post;
+    DM.TSUBPRODUTOS.Next;
+    until DM.TSUBPRODUTOS.eof;
+end;
+
+end.

@@ -1,0 +1,280 @@
+program Siscomad;
+
+uses
+  Forms,
+  UnitPrincipal in 'UnitPrincipal.pas' {frmPrincipal},
+  UnitDM in 'UnitDM.pas' {DM: TDataModule},
+  UnitEssencia in 'UnitEssencia.pas' {frmEssencia},
+  UnitCredor in 'UnitCredor.pas' {frmCredor},
+  UnitMunicipio in 'UnitMunicipio.pas' {frmMunicipio},
+  UnitInfo in 'UnitInfo.pas' {frmInfo},
+  UnitSplash in 'UnitSplash.pas' {frmSplash},
+  UnitSobre in 'UnitSobre.pas' {frmSobre},
+  UnitRepEssencia in 'UnitRepEssencia.pas' {RepEssencia},
+  UnitRepCredores in 'UnitRepCredores.pas' {RepCredores},
+  UnitRepFornecedores in 'UnitRepFornecedores.pas' {RepFornecedores},
+  UnitRepProduto in 'UnitRepProduto.pas' {RepProduto},
+  UnitRepMunicipio in 'UnitRepMunicipio.pas' {RepMunicipio},
+  UnitBackup in 'UnitBackup.pas' {frmBackup},
+  UnitRestore in 'UnitRestore.pas' {frmRestore},
+  UnitFornecedor in 'UnitFornecedor.pas' {frmFornecedores},
+  UnitSaidaMadeiras in 'UnitSaidaMadeiras.pas' {frmSaidaMadeiras},
+  UnitSaidaMadeirasProdutos in 'UnitSaidaMadeirasProdutos.pas' {frmSaidaMadeirasProdutos},
+  UnitConsultaESerrada in 'UnitConsultaESerrada.pas' {frmConsultaESerrada},
+  UnitPesquisaEntrada in 'UnitPesquisaEntrada.pas' {frmPesquisa},
+  UnitPesquisa1 in 'UnitPesquisa1.pas' {frmPesquisa1},
+  UnitPesquisa2 in 'UnitPesquisa2.pas' {frmPesquisa2},
+  UnitPesquisa3 in 'UnitPesquisa3.pas' {frmPesquisa3},
+  UnitDemo in 'UnitDemo.pas' {frmDemo},
+  UnitDemoGrafico in 'UnitDemoGrafico.pas' {frmDemoGrafico},
+  UnitDemoGrafico1 in 'UnitDemoGrafico1.pas' {frmDemoGrafico1},
+  UnitREntrada in 'UnitREntrada.pas' {frmREntrada},
+  UnitREntrada1 in 'UnitREntrada1.pas' {frmREntrada1},
+  UnitRepEntrada in 'UnitRepEntrada.pas' {RepEntrada},
+  UnitRepEntrada1 in 'UnitRepEntrada1.pas' {RepEntrada1},
+  UnitRepSaida in 'UnitRepSaida.pas' {RepSaida},
+  UnitRepSaida1 in 'UnitRepSaida1.pas' {RepSaida1},
+  UnitRSaida in 'UnitRSaida.pas' {frmRSaida},
+  UnitRSaida1 in 'UnitRSaida1.pas' {frmRSaida1},
+  UnitREstoque in 'UnitREstoque.pas' {frmREstoque},
+  UnitRepEstoque in 'UnitRepEstoque.pas' {RepEstoque},
+  UnitRepEstoque1 in 'UnitRepEstoque1.pas' {RepEstoque1},
+  UnitREstoque1 in 'UnitREstoque1.pas' {frmREstoque1},
+  UnitManutencao1 in 'UnitManutencao1.pas' {frmManutencao1},
+  UnitLogin in 'UnitLogin.pas' {frmLogin},
+  UnitAtualizacao in 'UnitAtualizacao.pas' {frmAtualizacao},
+  UnitUsuario in 'UnitUsuario.pas' {frmUsuario},
+  UnitEntradaSerrada in 'UnitEntradaSerrada.pas' {frmEntradaSerrada},
+  UnitEntradaSerradaProdutos in 'UnitEntradaSerradaProdutos.pas' {frmEntradaSerradaProdutos},
+  UnitREntrada2 in 'UnitREntrada2.pas' {frmREntrada2},
+  UnitREntrada3 in 'UnitREntrada3.pas' {frmREntrada3},
+  UnitRepEntrada2 in 'UnitRepEntrada2.pas' {RepEntrada2},
+  UnitRepEntrada3 in 'UnitRepEntrada3.pas' {RepEntrada3},
+  UnitRepCredoresCompleto in 'UnitRepCredoresCompleto.pas' {RepCredores1},
+  UnitRepRomaneioSerrada in 'UnitRepRomaneioSerrada.pas' {frmRRomaneioSerrada},
+  UnitRepRomaneioSerrada1 in 'UnitRepRomaneioSerrada1.pas' {RepRomaneioserrada},
+  Unitconfig in 'Unitconfig.pas' {frmconfig},
+  Unitromaneioserrada in 'Unitromaneioserrada.pas' {frmromaneioserrada},
+  Unitromaneioserradaprodutos in 'Unitromaneioserradaprodutos.pas' {frmromaneioSerradaProdutos},
+  Unitsubprodutos in 'Unitsubprodutos.pas' {frmsubprodutos},
+  Unitrepsubprodutos in 'Unitrepsubprodutos.pas' {Repsubproduto},
+  UnitLimparBD in 'UnitLimparBD.pas' {frmLimparBD},
+  Unitskin in 'Unitskin.pas' {frmSkin},
+  Unitconsultaproduto in 'Unitconsultaproduto.pas' {frmConsultaProduto},
+  UnitVenda in 'UnitVenda.pas' {frmVenda},
+  UnitConsultaProduto1 in 'UnitConsultaProduto1.pas' {frmConsultaProduto1},
+  Unitvendafechamento in 'Unitvendafechamento.pas' {frmVendaFechamento},
+  unitconsultapd in 'unitconsultapd.pas' {frmconsultapd},
+  unitrepestoquepatio in 'unitrepestoquepatio.pas' {RepEstoquePatio},
+  unitrestoquepatio in 'unitrestoquepatio.pas' {frmREstoquePatio},
+  unitconfigbd in 'unitconfigbd.pas' {frmconfigbd},
+  Unitvendaprodutos1 in 'Unitvendaprodutos1.pas' {frmVendaProdutos1},
+  UnitRfechamentovenda in 'UnitRfechamentovenda.pas' {frmRFechamentovenda},
+  UnitRepfechamentovenda in 'UnitRepfechamentovenda.pas' {RepFechamentosaida},
+  unitentradaserradagauge in 'unitentradaserradagauge.pas' {frmentradaserradagauge},
+  Unitentradaserradagauge1 in 'Unitentradaserradagauge1.pas' {frmentradaserradagauge1},
+  Unitentradaserradagauge2 in 'Unitentradaserradagauge2.pas' {frmentradaserradagauge2},
+  UnitRepfechamentovenda1 in 'UnitRepfechamentovenda1.pas' {RepFechamentosaida1},
+  unitrsaida2 in 'unitrsaida2.pas' {frmRsaida2},
+  unitfrmvendedor in 'unitfrmvendedor.pas' {frmvendedor},
+  unitfrmconsultapedido in 'unitfrmconsultapedido.pas' {frmconsultapedido},
+  Unitajustarestoque in 'Unitajustarestoque.pas' {frmajusteestoque},
+  Unitrepsaida2 in 'Unitrepsaida2.pas' {RepSaida2},
+  unitpsatisfacao in 'unitpsatisfacao.~~dfm' {frmPSatisfacao},
+  unittipopessoa in 'unittipopessoa.pas' {frmtipopessoa},
+  Unitrepfechamentovenda2 in 'Unitrepfechamentovenda2.pas' {RepFechamentosaida2},
+  unitfrmrclientes in 'unitfrmrclientes.pas' {frmrclientes},
+  unitrsaidaprodutos in 'unitrsaidaprodutos.pas' {frmrsaidaprodutos},
+  unitrepsaidaprodutos in 'unitrepsaidaprodutos.pas' {repsaidaprodutos},
+  unitrepsaidaprodutos1 in 'unitrepsaidaprodutos1.pas' {repsaidaprodutos1},
+  unitfrmocorrencia in 'unitfrmocorrencia.pas' {frmocorrencia},
+  unitpesquisavendedor in 'unitpesquisavendedor.pas' {frmpesquisavendedor},
+  unitfrmsetores in 'unitfrmsetores.pas' {frmsetores},
+  unittipocontato in 'unittipocontato.pas' {frmtipocontato},
+  unitfrmromaneio in 'unitfrmromaneio.pas' {frmrromaneio},
+  unitrepromaneio in 'unitrepromaneio.pas' {repromaneio},
+  unitvendaimprimirromaneiovenda in 'unitvendaimprimirromaneiovenda.pas' {frmvendaimprimirromaneiovenda},
+  Unitvendaprodo1edit in 'Unitvendaprodo1edit.pas' {frmVendaProdutos1edita},
+  unitusuariologof in 'unitusuariologof.pas' {frmusuariologof},
+  unitrepsaida3 in 'unitrepsaida3.pas' {RepSaida3},
+  unitfrmrsaida3 in 'unitfrmrsaida3.pas' {frmRSaida3},
+  unitrepsaida4 in 'unitrepsaida4.pas' {RepSaida4},
+  unitfrmvendafinaliza in 'unitfrmvendafinaliza.pas' {frmvendafinaliza},
+  unitconsultaentrega in 'unitconsultaentrega.pas' {frmconsultaentrega},
+  unitconsultaentregaedita in 'unitconsultaentregaedita.pas' {frmconsultaentregaedita},
+  unitfrmvendacontato in 'unitfrmvendacontato.pas' {frmvendacontato},
+  unitfrmpadraovenda in 'unitfrmpadraovenda.pas' {frmpadraovenda},
+  unitfrmdicas in 'unitfrmdicas.pas' {frmdicas},
+  unitfrmcredorseleciona in 'unitfrmcredorseleciona.pas' {frmcredor_Seleciona},
+  unitfrmvendabaixa in 'unitfrmvendabaixa.pas' {frmvendabaixa},
+  unitfrmrtipopagamento in 'unitfrmrtipopagamento.pas' {frmrtipopagamento},
+  unitreptipopagametno in 'unitreptipopagametno.pas' {Reptipopagamento},
+  unitreptipopagamento1 in 'unitreptipopagamento1.pas' {Reptipopagamento1},
+  unitreptipopagamento2 in 'unitreptipopagamento2.pas' {Reptipopagamento2},
+  unitfrmcontaspagar in 'unitfrmcontaspagar.pas' {frmcontaspagar},
+  unitfrmcontasreceber in 'unitfrmcontasreceber.pas' {frmcontasreceber},
+  unitfrmchequesemitidos in 'unitfrmchequesemitidos.pas' {frmchequesemitidos},
+  unitfrmchequesrecebidos in 'unitfrmchequesrecebidos.pas' {frmchequesrecebidos},
+  unitfrmchequesrepassar in 'unitfrmchequesrepassar.pas' {frmchequesrepassar},
+  unitfrmchequeextornar in 'unitfrmchequeextornar.pas' {frmchequesestornar},
+  unitfrmchequesdevolvidos in 'unitfrmchequesdevolvidos.pas' {frmchequesdevolvidos},
+  unitfrmchequesdevolvidosmotivos in 'unitfrmchequesdevolvidosmotivos.pas' {frmchequesdevolvidosmotivo},
+  unitfrmcontaspagarquitar in 'unitfrmcontaspagarquitar.pas' {frmcontaspagarquitar},
+  unitfrmcontaspagarestornar in 'unitfrmcontaspagarestornar.pas' {frmcontaspagarestornar},
+  unitfrmcontasreceberquitar in 'unitfrmcontasreceberquitar.pas' {frmcontasreceberquitar},
+  unitfrmcontasreceberestornar in 'unitfrmcontasreceberestornar.pas' {frmcontasreceberestornar},
+  unitfrmcategoria in 'unitfrmcategoria.pas' {frmcategoria},
+  unitfrmsubcategoria in 'unitfrmsubcategoria.pas' {frmsubcategoria},
+  unitfrmcategoriapesquisa in 'unitfrmcategoriapesquisa.pas' {frmcategoriapesquisa},
+  unitfrmsubcategoriapesquisa in 'unitfrmsubcategoriapesquisa.pas' {frmsubcategoriapesquisa},
+  unitfrmcontaspagarmanutencao in 'unitfrmcontaspagarmanutencao.pas' {frmcontaspagarmanutencao};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+//  Application.Title := 'Sismad';
+  frmsplash := Tfrmsplash.Create (application);
+  frmsplash.show;
+  frmsplash.Refresh;
+  Application.Title := 'Sismad';
+  Application.CreateForm(TfrmPrincipal, frmPrincipal);
+//  Application.CreateForm(Tfrmcategoria, frmcategoria);
+//  Application.CreateForm(Tfrmcategoriapesquisa, frmcategoriapesquisa);
+//  Application.CreateForm(Tfrmsubcategoriapesquisa, frmsubcategoriapesquisa);
+//  Application.CreateForm(Tfrmcontaspagarmanutencao, frmcontaspagarmanutencao);
+  //  Application.CreateForm(Tfrmsubcategoria, frmsubcategoria);
+  //  Application.CreateForm(Tfrmcontasreceberquitar, frmcontasreceberquitar);
+//  Application.CreateForm(Tfrmcontasreceberestornar, frmcontasreceberestornar);
+  //  Application.CreateForm(Tfrmcontaspagarestornar, frmcontaspagarestornar);
+  //  Application.CreateForm(Tfrmcontaspagarquitar, frmcontaspagarquitar);
+  //  Application.CreateForm(Tfrmchequesdevolvidosmotivo, frmchequesdevolvidosmotivo);
+  //  Application.CreateForm(Tfrmchequesdevolvidos, frmchequesdevolvidos);
+  //  Application.CreateForm(Tfrmchequeextornar, frmchequeextornar);
+  //  Application.CreateForm(Tfrmchequesrepassar, frmchequesrepassar);
+  //  Application.CreateForm(Tfrmchequesrecebidos, frmchequesrecebidos);
+  //  Application.CreateForm(Tfrmchequesemitidos, frmchequesemitidos);
+  //  Application.CreateForm(Tfrmcontasreceber, frmcontasreceber);
+  //  Application.CreateForm(TReptipopagamento1, Reptipopagamento1);
+//  Application.CreateForm(TReptipopagamento2, Reptipopagamento2);
+//  Application.CreateForm(Tfrmcontaspagar, frmcontaspagar);
+  frmPrincipal.Enabled := false;
+  Application.CreateForm(TDM, DM);
+//  Application.CreateForm(Tfrmvendabaixa, frmvendabaixa);
+  //  Application.CreateForm(Tfrmcredor_Seleciona, frmcredor_Seleciona);
+  //  Application.CreateForm(Tfrmdicas, frmdicas);
+  //  Application.CreateForm(Tfrmpadraovenda, frmpadraovenda);
+  //  Application.CreateForm(Tfrmvendacontato, frmvendacontato);
+  //  Application.CreateForm(Tfrmconsultaentregaedita, frmconsultaentregaedita);
+  //  Application.CreateForm(Tfrmvendafinaliza, frmvendafinaliza);
+//  Application.CreateForm(Tfrmconsultaentrega, frmconsultaentrega);
+  //  Application.CreateForm(Tfrmrromaneio, frmrromaneio);
+//>  Application.CreateForm(Trepromaneio, repromaneio);
+//>  Application.CreateForm(TRepSaida3, RepSaida3);
+//  Application.CreateForm(TfrmRSaida3, frmRSaida3);
+//>  Application.CreateForm(TRepSaida4, RepSaida4);
+  //  Application.CreateForm(Tfrmusuariologof, frmusuariologof);
+  //  Application.CreateForm(TfrmVendaProdutos1edita, frmVendaProdutos1edita);
+  //  Application.CreateForm(Tfrmvendaimprimirromaneiovenda, frmvendaimprimirromaneiovenda);
+  //  Application.CreateForm(Tfrmtipocontato, frmtipocontato);
+  //  Application.CreateForm(Tfrmsetores, frmsetores);
+  //  Application.CreateForm(Tfrmpesquisavendedor, frmpesquisavendedor);
+  //  Application.CreateForm(Tfrmocorrencia, frmocorrencia);
+  //  Application.CreateForm(Tfrmconfigbd, frmconfigbd);
+//  Application.CreateForm(TfrmSplash, frmSplash);
+//>  Application.CreateForm(Trepsaidaprodutos, repsaidaprodutos);
+//>  Application.CreateForm(TRepFechamentosaida2, RepFechamentosaida2);
+//  Application.CreateForm(TRepFechamentosaida1, RepFechamentosaida1);
+//  Application.CreateForm(TRepFechamentosaida, RepFechamentosaida);
+  //  Application.CreateForm(Tfrmrsaidaprodutos, frmrsaidaprodutos);
+//>  Application.CreateForm(Trepsaidaprodutos, repsaidaprodutos);
+  //  Application.CreateForm(TRepFechamentosaida2, RepFechamentosaida2);
+//  Application.CreateForm(Tfrmrclientes, frmrclientes);
+  //  Application.CreateForm(Tfrmtipopessoa, frmtipopessoa);
+  //  Application.CreateForm(TfrmPSatisfacao, frmPSatisfacao);
+  //  Application.CreateForm(TfrmRFechamentovenda, frmRFechamentovenda);
+//>  Application.CreateForm(TRepFechamentosaida, RepFechamentosaida);
+//>  Application.CreateForm(TRepFechamentosaida1, RepFechamentosaida1);
+  //Application.CreateForm(TfrmRsaida2, frmRsaida2);
+//  Application.CreateForm(Tfrmajusteestoque, frmajusteestoque);
+  //  Application.CreateForm(Tfrmconsultapedido, frmconsultapedido);
+  //  Application.CreateForm(Tfrmvendedor, frmvendedor);
+  //  Application.CreateForm(Tfrmentradaserradagauge2, frmentradaserradagauge2);
+  //  Application.CreateForm(Tfrmentradaserradagauge1, frmentradaserradagauge1);
+  //  Application.CreateForm(Tfrmentradaserradagauge, frmentradaserradagauge);
+  //  Application.CreateForm(TfrmSplash, frmSplash);
+//  Application.CreateForm(TfrmLogin, frmLogin);
+
+//  Application.CreateForm(TfrmEssencia, frmEssencia);
+//  Application.CreateForm(TfrmCredor, frmCredor);
+//  Application.CreateForm(TfrmMunicipio, frmMunicipio);
+//  Application.CreateForm(TfrmProdutos, frmProdutos);
+//  Application.CreateForm(TfrmInfo, frmInfo);
+//  Application.CreateForm(TfrmSobre, frmSobre);
+//  Application.CreateForm(TRepEssencia, RepEssencia);
+  //Application.CreateForm(TRepCredores, RepCredores);
+//  Application.CreateForm(TRepFornecedores, RepFornecedores);
+  //Application.CreateForm(TRepProduto, RepProduto);
+//  Application.CreateForm(TRepMunicipio, RepMunicipio);
+//  Application.CreateForm(TfrmBackup, frmBackup);
+//  Application.CreateForm(TfrmRestore, frmRestore);
+//  Application.CreateForm(TfrmFornecedores, frmFornecedores);
+//  Application.CreateForm(TfrmSaidaMadeiras, frmSaidaMadeiras);
+//  Application.CreateForm(TfrmSaidaMadeirasProdutos, frmSaidaMadeirasProdutos);
+//  Application.CreateForm(TfrmConsultaESerrada, frmConsultaESerrada);
+//Application.CreateForm(TfrmPesquisa, frmPesquisa);
+//  Application.CreateForm(TfrmPesquisa1, frmPesquisa1);
+  //Application.CreateForm(TfrmPesquisa2, frmPesquisa2);
+//  Application.CreateForm(TfrmPesquisa3, frmPesquisa3);
+//  Application.CreateForm(TfrmDemo, frmDemo);
+//  Application.CreateForm(TfrmDemoGrafico, frmDemoGrafico);
+//  Application.CreateForm(TfrmDemoGrafico1, frmDemoGrafico1);
+//  Application.CreateForm(TfrmREntrada, frmREntrada);
+//  Application.CreateForm(TfrmREntrada1, frmREntrada1);
+//  Application.CreateForm(TRepEntrada, RepEntrada);
+  //Application.CreateForm(TRepEntrada1, RepEntrada1);
+//>  Application.CreateForm(TRepSaida, RepSaida);
+//>  Application.CreateForm(TRepSaida1, RepSaida1);
+  //Application.CreateForm(TfrmRSaida, frmRSaida);
+//  Application.CreateForm(TfrmRSaida1, frmRSaida1);
+//  Application.CreateForm(TfrmREstoque, frmREstoque);
+//  Application.CreateForm(TRepEstoque, RepEstoque);
+  //Application.CreateForm(TRepEstoque1, RepEstoque1);
+//  Application.CreateForm(TfrmREstoque1, frmREstoque1);
+//  Application.CreateForm(TfrmManutencao1, frmManutencao1);
+//  Application.CreateForm(TfrmAtualizacao, frmAtualizacao);
+//  Application.CreateForm(TfrmUsuario, frmUsuario);
+//  Application.CreateForm(TfrmEntradaSerrada, frmEntradaSerrada);
+//  Application.CreateForm(TfrmEntradaSerradaProdutos, frmEntradaSerradaProdutos);
+//  Application.CreateForm(TfrmREntrada2, frmREntrada2);
+//  Application.CreateForm(TfrmREntrada3, frmREntrada3);
+  //Application.CreateForm(TRepEntrada2, RepEntrada2);
+//>  Application.CreateForm(TRepEntrada3, RepEntrada3);
+  //Application.CreateForm(TRepCredores1, RepCredores1);
+//  Application.CreateForm(TfrmRRomaneioSerrada, frmRRomaneioSerrada);
+//  Application.CreateForm(TRepRomaneioserrada, RepRomaneioserrada);
+//  Application.CreateForm(Tfrmconfig, frmconfig);
+//  Application.CreateForm(Tfrmromaneioserrada, frmromaneioserrada);
+//  Application.CreateForm(TfrmromaneioSerradaProdutos, frmromaneioSerradaProdutos);
+//  Application.CreateForm(Tfrmsubprodutos, frmsubprodutos);
+//  Application.CreateForm(TRepsubproduto, Repsubproduto);
+//  Application.CreateForm(TfrmLimparBD, frmLimparBD);
+//  Application.CreateForm(TfrmSkin, frmSkin);
+//  Application.CreateForm(TfrmConsultaProduto, frmConsultaProduto);
+//  Application.CreateForm(TfrmVenda, frmVenda);
+//  Application.CreateForm(TfrmVendaProdutos, frmVendaProdutos);
+//  Application.CreateForm(TfrmConsultaProduto1, frmConsultaProduto1);
+//  Application.CreateForm(TfrmVendaFechamento, frmVendaFechamento);
+//  Application.CreateForm(Tfrmconsultapd, frmconsultapd);
+//>  Application.CreateForm(TRepEstoquePatio, RepEstoquePatio);
+    Application.CreateForm(Tfrmconfigbd, frmconfigbd);
+//  Application.CreateForm(TfrmREstoquePatio, frmREstoquePatio);
+//  Application.CreateForm(TfrmConsultaPlaqueta, frmConsultaPlaqueta);
+//  Application.CreateForm(TfrmVendaProdutos1, frmVendaProdutos1);
+if dm.IBDatabase1.Connected then
+  try
+  Application.Run;
+  except
+  Application.Terminate;
+  end;
+end.

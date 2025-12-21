@@ -1,0 +1,364 @@
+object frmRRomaneioSerrada: TfrmRRomaneioSerrada
+  Left = 256
+  Top = 140
+  Width = 471
+  Height = 340
+  AutoSize = True
+  BorderIcons = []
+  Caption = 'Relat'#243'rio - Romaneio Serrada'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 455
+    Height = 304
+    Align = alClient
+    TabOrder = 0
+    object Bevel1: TBevel
+      Left = 8
+      Top = 256
+      Width = 449
+      Height = 9
+      Shape = bsTopLine
+    end
+    object GroupBox1: TGroupBox
+      Left = 8
+      Top = 8
+      Width = 449
+      Height = 81
+      Caption = 'Cliente (Pressione a tecla "ALT + P" para pesquisar Fornecedor)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      object FORNECEDOR: TEdit
+        Left = 80
+        Top = 36
+        Width = 361
+        Height = 24
+        CharCase = ecUpperCase
+        Color = clBtnFace
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 1
+      end
+      object Edit1: TEdit
+        Left = 8
+        Top = 36
+        Width = 63
+        Height = 24
+        TabStop = False
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -13
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
+      end
+      object BitBtn4: TBitBtn
+        Left = 49
+        Top = 38
+        Width = 20
+        Height = 21
+        Hint = 'Pesquisa Cliente'
+        Caption = '&P'
+        DragCursor = crHandPoint
+        TabOrder = 0
+        OnClick = BitBtn4Click
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00555555555555
+          5555555555555555555555555555555555555555555555555555555555555555
+          555555555555555555555555555555555555555FFFFFFFFFF555550000000000
+          55555577777777775F55500B8B8B8B8B05555775F555555575F550F0B8B8B8B8
+          B05557F75F555555575F50BF0B8B8B8B8B0557F575FFFFFFFF7F50FBF0000000
+          000557F557777777777550BFBFBFBFB0555557F555555557F55550FBFBFBFBF0
+          555557F555555FF7555550BFBFBF00055555575F555577755555550BFBF05555
+          55555575FFF75555555555700007555555555557777555555555555555555555
+          5555555555555555555555555555555555555555555555555555}
+        Margin = 1
+        NumGlyphs = 2
+      end
+    end
+    object Panel2: TPanel
+      Left = 126
+      Top = 266
+      Width = 332
+      Height = 36
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      TabOrder = 4
+      object BitBtn5: TBitBtn
+        Left = 114
+        Top = 1
+        Width = 107
+        Height = 33
+        Cursor = crHandPoint
+        Caption = 'Im&primir'
+        TabOrder = 1
+        OnClick = BitBtn5Click
+        Glyph.Data = {
+          66010000424D6601000000000000760000002800000014000000140000000100
+          040000000000F000000000000000000000001000000010000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00DDDDDDDDDDDD
+          DDDDDDDD0000DDDDDDDDDDDDDDDDDDDD0000DDDDD7777777777DDDDD0000DDDD
+          000000000007DDDD0000DDD07878787870707DDD0000DD0000000000000707DD
+          0000DD0F8F8F8AAA8F0007DD0000DD08F8F8F999F80707DD0000DD0000000000
+          0008707D0000DD08F8F8F8F8F080807D0000DDD0000000000F08007D0000DDDD
+          0BFFFBFFF0F080DD0000DDDDD0F00000F0000DDD0000DDDDD0FBFFFBFF0DDDDD
+          0000DDDDDD0F00000F0DDDDD0000DDDDDD0FFBFFFBF0DDDD0000DDDDDDD00000
+          0000DDDD0000DDDDDDDDDDDDDDDDDDDD0000DDDDDDDDDDDDDDDDDDDD0000DDDD
+          DDDDDDDDDDDDDDDD0000}
+      end
+      object BitBtn6: TBitBtn
+        Left = 7
+        Top = 1
+        Width = 107
+        Height = 33
+        Cursor = crHandPoint
+        Caption = '&Vizualizar'
+        TabOrder = 0
+        OnClick = BitBtn6Click
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          80000080000000808000800000008000800080800000C0C0C000808080000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00709999907700
+          0000077778F77778F78888888F7770999990770CCCCC077778F77778F78F7777
+          8F7770999990770CCCCC077778F77778778F77778F7777099907770CCCCC0777
+          778FFF87778F77778F7777700077770CCCCC077777788877778FFFFF8F777777
+          7777770000000777777777FFFF888888877F7777700000077777777077777888
+          888FF7777FF8777770BB000007777008777778FF88888FF7788777777700BBB0
+          7000088077777F887778F8888778777770BBBBB077708007777778777778F778
+          7887777770BBBB0777700777777778F7778F77788F777777070BBB0777770777
+          77778F8F778777778F7777770770B0777777077777778F78F8F777778F777777
+          0770B0777777077777778F78F8777777877777777077077777707777777778F7
+          8F777778F77777777077777777707777777778FF777777787777777777007777
+          7007777777777788F777788F7777777777770000077777777777777788888777
+          7777777777777777777777777777777777777777777777777777777777777777
+          77777777777777777777}
+        NumGlyphs = 2
+      end
+      object BitBtn7: TBitBtn
+        Left = 220
+        Top = 1
+        Width = 107
+        Height = 33
+        Cursor = crHandPoint
+        Caption = '&Retornar'
+        TabOrder = 2
+        OnClick = BitBtn7Click
+        Glyph.Data = {
+          E6040000424DE604000000000000360000002800000013000000140000000100
+          180000000000B0040000C30E0000C30E00000000000000000000BFBFBFBFBFBF
+          BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF8000804080
+          803F37007F7F7F7F7F7FBFBFBFBFBFBFBFBFBF000000BFBFBFBFBFBFBFBFBFBF
+          BFBFBFBFBFBFBFBFBFBFBF7F7F7F7F7F7F7F7F7F8000804080803F3700000080
+          0000807F7F7F7F7F7FBFBFBFBFBFBF000000BFBFBFBFBFBFBFBFBFBFBFBF7F7F
+          7F7F7F7F7F7F7F7F7F7F7F7F7F8000804080803F37000000808000800000807F
+          7F7F7F7F7F7F7F7FBFBFBF000000BFBFBF7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F
+          7F7F7F7F7F7F8000804080803F3700000080000080800080000080BFBFBFBFBF
+          BFBFBFBFBFBFBF0000007F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F80
+          00804080803F37000000800000800000808000803F37003F37003F37003F3700
+          000080000000BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF8000804080803F37
+          000000800000800000800000808000800000808000800000800000FF0000FF00
+          0000BFBFBFBFBFBFBFBFBFBFBFBFBFBFBF8000804080803F3700000080000080
+          000080000080000080000080800080000080800080FFC8CF0000FF000000BFBF
+          BFBFBFBFBFBFBFBFBFBF8000804080803F370000008000008000008000008000
+          0080000080800080000080800080000080BFBFBF8000FF000000BFBFBFBFBFBF
+          BFBFBF8000803F37003F37008000808000808000808000808000808000808000
+          80800080800080800080800080FFC8CF8000FF000000BFBFBFBFBFBFBFBFBF80
+          00800000800000FF0000FF0000FF0000FF8000FF0000FF8000FF0000FF0000FF
+          0000FF8000FF8000FFBFBFBF8000FF000000BFBFBFBFBFBFBFBFBF0000808000
+          80FFC8CF8000FFFFC8CF8000FFFFC8CF8000FFFFC8CF8000FF0000FF8000FF80
+          00FF8000FFFFC8CF8000FF000000BFBFBFBFBFBFBFBFBFBFBFBF000080800080
+          FFC8CF8000FFFFC8CF8000FFFFC8CF8000FFFFC8CF8000FFFFC8CF8000FF8000
+          FFBFBFBF8000FF000000BFBFBFBFBFBFBFBFBFBFBFBFBFBFBF000080800080FF
+          C8CF8000FFFFC8CF8000FFFFC8CF8000FFFFC8CFBFBFBFFFC8CFBFBFBFFFC8CF
+          8000FF000000BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF000080000080FFC8
+          CF8000FFFFC8CF8000FFFFC8CFBFBFBF0000FF0000FF0000FF0000FF0000FF00
+          0000BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF800080000080FFC8CF
+          8000FFFFC8CF8000FFFFC8CF8000FFBFBFBFBFBFBFBFBFBFBFBFBF000000BFBF
+          BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF800080000080FFC8CF80
+          00FFFFC8CFBFBFBF8000FFBFBFBFBFBFBFBFBFBFBFBFBF000000BFBFBFBFBFBF
+          BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF800080000080FFC8CF8000
+          FFFFC8CF8000FFBFBFBFBFBFBFBFBFBFBFBFBF000000BFBFBFBFBFBFBFBFBFBF
+          BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF800080000080FFC8CFBFBFBF
+          8000FFBFBFBFBFBFBFBFBFBFBFBFBF000000BFBFBFBFBFBFBFBFBFBFBFBFBFBF
+          BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF8000800000800000FF0000FFBF
+          BFBFBFBFBFBFBFBFBFBFBF000000BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF
+          BFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBFBF8000808000800000FFBFBFBFBFBF
+          BFBFBFBFBFBFBF000000}
+      end
+    end
+    object GroupBox2: TGroupBox
+      Left = 8
+      Top = 96
+      Width = 153
+      Height = 65
+      Caption = 'Nota Fiscal'
+      TabOrder = 1
+      object nota: TSpinEditXP
+        Left = 8
+        Top = 24
+        Width = 129
+        Height = 26
+        Alignment = taLeftJustify
+        Ctl3D = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clGray
+        Font.Height = -16
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        Increment = 1.000000000000000000
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 0
+        Colors.ColorDisabled = clBtnFace
+        Colors.ColorDisabledText = clGray
+        Colors.ColorOnFocus = clWhite
+        Colors.ColorOnNotFocus = clInfoBk
+        EditLengthAlign = 0
+        EditPrecision = 0
+      end
+    end
+    object GroupBox3: TGroupBox
+      Left = 8
+      Top = 176
+      Width = 449
+      Height = 65
+      Caption = 'Observa'#231#227'o'
+      TabOrder = 3
+      object Memo1: TMemo
+        Left = 8
+        Top = 16
+        Width = 433
+        Height = 41
+        TabOrder = 0
+      end
+    end
+    object GroupBox4: TGroupBox
+      Left = 169
+      Top = 96
+      Width = 288
+      Height = 65
+      Caption = 'Classifica'#231#227'o dos Registros'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 2
+      object ComboBox1: TComboBox
+        Left = 8
+        Top = 24
+        Width = 273
+        Height = 26
+        AutoDropDown = True
+        Style = csDropDownList
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlack
+        Font.Height = -16
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ItemHeight = 18
+        ItemIndex = 0
+        ParentFont = False
+        TabOrder = 0
+        Text = 'PRODUTO'
+        Items.Strings = (
+          'PRODUTO'
+          'ESS'#202'NCIA')
+      end
+    end
+  end
+  object Edit2: TEdit
+    Left = 16
+    Top = 168
+    Width = 121
+    Height = 21
+    TabOrder = 1
+    Visible = False
+  end
+  object Edit3: TEdit
+    Left = 16
+    Top = 192
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    Visible = False
+  end
+  object Edit5: TEdit
+    Left = 16
+    Top = 216
+    Width = 121
+    Height = 21
+    TabOrder = 3
+    Visible = False
+  end
+  object Edit6: TEdit
+    Left = 160
+    Top = 184
+    Width = 121
+    Height = 21
+    TabOrder = 4
+    Visible = False
+  end
+  object Edit7: TEdit
+    Left = 160
+    Top = 208
+    Width = 121
+    Height = 21
+    TabOrder = 5
+    Visible = False
+  end
+  object Edit8: TEdit
+    Left = 160
+    Top = 232
+    Width = 121
+    Height = 21
+    TabOrder = 6
+    Visible = False
+  end
+  object Edit9: TEdit
+    Left = 288
+    Top = 192
+    Width = 121
+    Height = 21
+    TabOrder = 7
+    Visible = False
+  end
+  object Edit10: TEdit
+    Left = 288
+    Top = 216
+    Width = 121
+    Height = 21
+    TabOrder = 8
+    Visible = False
+  end
+end

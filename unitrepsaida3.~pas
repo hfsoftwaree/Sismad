@@ -1,0 +1,186 @@
+unit unitrepsaida3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, QuickRpt, QRCtrls, ExtCtrls, StdCtrls, DB, IBCustomDataSet,
+  IBTable, IBDatabase, IBQuery;
+
+type
+  TRepSaida3 = class(TForm)
+    QuickRep1: TQuickRep;
+    QRBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRLabel1: TQRLabel;
+    NRELATORIO: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape2: TQRShape;
+    QRDBText2: TQRDBText;
+    QRLabel3: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRShape4: TQRShape;
+    QRSysData1: TQRSysData;
+    QRBand2: TQRBand;
+    QRShape5: TQRShape;
+    QRSysData2: TQRSysData;
+    QRSysData3: TQRSysData;
+    QRLabel9: TQRLabel;
+    PI: TQRLabel;
+    DENTRADA: TDataSource;
+    QRLabel28: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRLabel30: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRBand3: TQRBand;
+    QRShape6: TQRShape;
+    QRLabel7: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRShape3: TQRShape;
+    TOTAL: TQRLabel;
+    TENTRADA: TIBTable;
+    TENTRADACODIGOLANCAMENTO: TIntegerField;
+    TENTRADACODIGOCLIENTE: TFloatField;
+    TENTRADANF: TFloatField;
+    TENTRADADATA: TDateTimeField;
+    TENTRADAESSENCIA: TIBStringField;
+    TENTRADAQTDE_PRODUTOS: TFloatField;
+    TENTRADATOTALM3: TFloatField;
+    TENTRADAVAL_TOT_PRODUTOS: TFloatField;
+    TENTRADAFORMAPAGAMENTO: TIBStringField;
+    TENTRADADESCONTO: TFloatField;
+    TENTRADAVAL_TOT_NOTA: TFloatField;
+    TENTRADAPRAZO: TIntegerField;
+    TENTRADAPARCELA1: TDateTimeField;
+    TENTRADAPARCELA2: TDateTimeField;
+    TENTRADAMOEDA: TIBStringField;
+    TENTRADANUMEROPARCELAS: TFloatField;
+    TENTRADAINTERVALOPARCELAS: TFloatField;
+    TENTRADACODIGOESSENCIA: TFloatField;
+    TENTRADATIPOPAGAMENTO: TIBStringField;
+    TENTRADAVALORENTRADA: TFloatField;
+    TENTRADACODIGOVENDEDOR: TIntegerField;
+    TENTRADANOMEVENDEDOR: TIBStringField;
+    QRDBText7: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRBand4: TQRBand;
+    QRShape7: TQRShape;
+    DQSAIDA: TDataSource;
+    TENTRADAQTDEM2: TFloatField;
+    TENTRADAQTDEML: TFloatField;
+    TENTRADATIPOCODIGO: TIBStringField;
+    TENTRADATIPOLANCAMENTO: TIBStringField;
+    TENTRADANOMECLIENTE: TIBStringField;
+    TENTRADAFECHAMENTOTIPO: TIBStringField;
+    TENTRADAFECHAMENTODESCRICAO: TIBStringField;
+    QRLabel12: TQRLabel;
+    QRSubDetail2: TQRSubDetail;
+    QRBand5: TQRBand;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRShape8: TQRShape;
+    QRShape9: TQRShape;
+    TOTAL1: TQRLabel;
+    QRExpr4: TQRExpr;
+    QRExpr5: TQRExpr;
+    QRExpr6: TQRExpr;
+    QRShape10: TQRShape;
+    QRLabel23: TQRLabel;
+    QRExpr7: TQRExpr;
+    QRExpr8: TQRExpr;
+    QRExpr9: TQRExpr;
+    query5: TIBTable;
+    query5CODIGOLANCAMENTO: TIntegerField;
+    query5CODIGOCLIENTE: TFloatField;
+    query5NF: TFloatField;
+    query5DATA: TDateTimeField;
+    query5ESSENCIA: TIBStringField;
+    query5QTDE_PRODUTOS: TFloatField;
+    query5TOTALM3: TFloatField;
+    query5VAL_TOT_PRODUTOS: TFloatField;
+    query5FORMAPAGAMENTO: TIBStringField;
+    query5DESCONTO: TFloatField;
+    query5VAL_TOT_NOTA: TFloatField;
+    query5PRAZO: TIntegerField;
+    query5PARCELA1: TDateTimeField;
+    query5PARCELA2: TDateTimeField;
+    query5MOEDA: TIBStringField;
+    query5NUMEROPARCELAS: TFloatField;
+    query5INTERVALOPARCELAS: TFloatField;
+    query5CODIGOESSENCIA: TFloatField;
+    query5TIPOPAGAMENTO: TIBStringField;
+    query5VALORENTRADA: TFloatField;
+    query5CODIGOVENDEDOR: TIntegerField;
+    query5NOMEVENDEDOR: TIBStringField;
+    query5QTDEM2: TFloatField;
+    query5QTDEML: TFloatField;
+    query5TIPOCODIGO: TIBStringField;
+    query5TIPOLANCAMENTO: TIBStringField;
+    query5NOMECLIENTE: TIBStringField;
+    query5FECHAMENTOTIPO: TIBStringField;
+    query5FECHAMENTODESCRICAO: TIBStringField;
+    QRShape11: TQRShape;
+    QRShape12: TQRShape;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  RepSaida3: TRepSaida3;
+
+implementation
+
+uses UnitDM;
+
+
+
+
+
+{$R *.dfm}
+
+
+
+
+
+procedure TRepSaida3.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+TENTRADA.Close; 
+DM.QManutencao.Close;
+end;
+
+procedure TRepSaida3.FormShow(Sender: TObject);
+begin
+//DM.QManutencao.Open; 
+end;
+
+end.

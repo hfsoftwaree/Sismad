@@ -1,0 +1,229 @@
+unit unitfrmvendabaixa;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, jpeg, ExtCtrls, DB, IBCustomDataSet, IBTable, StdCtrls, Buttons,
+  DBCtrls, Grids, DBGrids;
+
+type
+  Tfrmvendabaixa = class(TForm)
+    Image1: TImage;
+    Panel1: TPanel;
+    Label1: TLabel;
+    DBMemo1: TDBMemo;
+    Label2: TLabel;
+    Label3: TLabel;
+    Bevel1: TBevel;
+    Panel2: TPanel;
+    BitBtn6: TBitBtn;
+    BitBtn7: TBitBtn;
+    Table1: TIBTable;
+    DataSource1: TDataSource;
+    DBMemo2: TDBMemo;
+    procedure BitBtn7Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn6Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmvendabaixa: Tfrmvendabaixa;
+
+implementation
+
+uses UnitPrincipal, UnitDM, UnitVenda;
+
+{$R *.dfm}
+
+procedure Tfrmvendabaixa.BitBtn7Click(Sender: TObject);
+begin
+table1.Close ;
+Close;
+end;
+
+procedure Tfrmvendabaixa.FormShow(Sender: TObject);
+begin
+if frmvenda.Tag = 1 then
+begin
+table1.Filter :=  'NF = ' + QuotedStr(frmvenda.dbedit8.Text)+ 'and CODIGOCLIENTE= ' + QuotedStr(frmvenda.DBEdit9.Text);
+table1.Filtered:=True;
+table1.Open;
+Label3.Caption := TABLE1['NOMECLIENTE'];
+table1.edit;
+dbmemo2.visible := false;
+dbmemo1.visible := true;
+end;
+
+if frmvenda.Tag = 2 then
+begin
+Label3.Caption := frmvenda.fornecedor.Text ;
+dbmemo2.visible := true;
+dbmemo1.visible := false;
+end;
+end;
+
+
+procedure Tfrmvendabaixa.BitBtn6Click(Sender: TObject);
+var total, total3, total4, total5, total6, total1, total2, total10 : Real;
+begin
+if frmvenda.Tag = 1 then //baixa orcamento
+begin
+if dbmemo1.Text = '' then
+begin
+Application.MessageBox('Motivo da baixa deve ser informado!', 'Informação', mb_Ok + mb_IconInformation);
+dbmemo1.SetFocus ;
+end;
+
+if (dbmemo1.Text <> '') then
+begin
+If Application.MessageBox('Confirma Baixa do Orçamento?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+//soma para extorno no estoque
+   frmvenda.QUERY2.first;
+   while not frmvenda.QUERY2.Eof do
+     begin
+        DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (frmvenda.DBEDIT13.Text)+ ' and CODIGOPRODUTO = ' + (frmvenda.DBEDIT14.Text) + 'and COMPRIMENTO = ' + (frmvenda.EDIT7.Text)+ 'and LARGURA = ' + (frmvenda.EDIT9.Text)+ 'and EXPESSURA = ' + (frmvenda.EDIT10.Text);
+        DM.TESTOQUE.Filtered := True;
+        dm.TESTOQUE.Open;
+//        if dm.TESTOQUE.RecordCount <> 0 then showmessage('Prosseguir') else showmessage('erro');
+        DM.TESTOQUE.Edit;
+        total3 := 0;
+        total4 := 0;
+        total5:=0;
+        total6 :=0;
+
+        total3 := DM.TESTOQUE['QUANTIDADE'] + total3 ;
+        total4 := DM.TESTOQUE['TOTALM3'] + total4 ;
+        total5 := frmvenda.QUERY2['QUANTIDADE'] + total5;
+        total6 := frmvenda.QUERY2['TOTALM3'] + total6;
+
+        DM.TESTOQUE['QUANTIDADE'] := total3 + total5;
+        DM.TESTOQUE['TOTALM3'] := total4 + total6;
+          if DM.TESTOQUE['QTDEM2'] = '0,00' then
+          begin
+          DM.TESTOQUE['QTDEM2'] := '0,00';
+          end
+          else
+          begin
+          if DM.TESTOQUE['QTDEM2'] <> '0,00' then
+          begin
+          DM.TESTOQUE['QTDEM2'] := DM.TESTOQUE['QUANTIDADE'];
+          end;
+          end;
+          if DM.TESTOQUE['QTDEML'] = '0,00' then
+          begin
+          DM.TESTOQUE['QTDEML'] := '0,00';
+          end
+          else
+          begin
+          if DM.TESTOQUE['QTDEML'] <> '0,00' then
+          begin
+          DM.TESTOQUE['QTDEML'] := DM.TESTOQUE['QUANTIDADE'];
+          end;
+          end;
+
+//        if dm.TESTOQUE.RecordCount <> 0 then showmessage('Proximo?') else showmessage('erro');
+        DM.TESTOQUE.Post;
+        frmvenda.QUERY2.Next;
+     end;
+     DM.TESTOQUE.Filtered := FALSE;
+     DM.TESTOQUE.Close;
+
+
+
+table1['FECHAMENTOTIPO'] := '9';
+table1['FECHAMENTODESCRICAO'] := 'Baixado';
+table1.Post;
+table1.Close ;
+frmvenda.bitbtn15.click;
+frmvenda.Tag := 1;
+dbmemo1.Clear ;
+Close;
+end;
+end;
+end;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+if frmvenda.Tag = 2 then  //cancela pedido
+begin
+if dbmemo2.Text = '' then
+begin
+Application.MessageBox('Motivo do Cançelamento deve ser informado!', 'Informação', mb_Ok + mb_IconInformation);
+dbmemo2.SetFocus ;
+end;
+
+if (dbmemo2.Text <> '') then
+begin
+If Application.MessageBox('Atenção! Após o cançelamento da Venda, não será mais possível reabri-la?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+//soma para extorno no estoque
+   DM.TSaida_Discriminacao.first;
+   while not DM.TSaida_Discriminacao.Eof do
+     begin
+        DM.TESTOQUE.Filter := 'CODIGOESSENCIA = ' + (frmvenda.DBEDIT4.Text)+ ' and CODIGOPRODUTO = ' + (frmvenda.DBEDIT5.Text) + 'and COMPRIMENTO = ' + (frmvenda.EDIT1.Text)+ 'and LARGURA = ' + (frmvenda.EDIT2.Text)+ 'and EXPESSURA = ' + (frmvenda.EDIT3.Text);
+        DM.TESTOQUE.Filtered := True;
+        dm.TESTOQUE.Open;
+//        if dm.TESTOQUE.RecordCount <> 0 then showmessage('Prosseguir') else showmessage('erro');
+        DM.TESTOQUE.Edit;
+        total3 := 0;
+        total4 := 0;
+        total5:=0;
+        total6 :=0;
+
+        total3 := DM.TESTOQUE['QUANTIDADE'] + total3 ;
+        total4 := DM.TESTOQUE['TOTALM3'] + total4 ;
+        total5 := DM.TSaida_Discriminacao['QUANTIDADE'] + total5;
+        total6 := DM.TSaida_Discriminacao['TOTALM3'] + total6;
+
+        DM.TESTOQUE['QUANTIDADE'] := total3 + total5;
+        DM.TESTOQUE['TOTALM3'] := total4 + total6;
+          if DM.TESTOQUE['QTDEM2'] = '0,00' then
+          begin
+          DM.TESTOQUE['QTDEM2'] := '0,00';
+          end
+          else
+          begin
+          if DM.TESTOQUE['QTDEM2'] <> '0,00' then
+          begin
+          DM.TESTOQUE['QTDEM2'] := DM.TESTOQUE['QUANTIDADE'];
+          end;
+          end;
+          if DM.TESTOQUE['QTDEML'] = '0,00' then
+          begin
+          DM.TESTOQUE['QTDEML'] := '0,00';
+          end
+          else
+          begin
+          if DM.TESTOQUE['QTDEML'] <> '0,00' then
+          begin
+          DM.TESTOQUE['QTDEML'] := DM.TESTOQUE['QUANTIDADE'];
+          end;
+          end;
+
+//        if dm.TESTOQUE.RecordCount <> 0 then showmessage('Proximo?') else showmessage('erro');
+        DM.TESTOQUE.Post;
+        DM.TSaida_Discriminacao.Next;
+     end;
+     DM.TESTOQUE.Filtered := FALSE;
+     DM.TESTOQUE.Close;
+
+
+DM.TSAIDAFECHAMENTO['FECHAMENTOTIPO'] := '8';
+DM.TSAIDAFECHAMENTO['FECHAMENTODESCRICAO'] := 'Pedido Cancelado';
+DM.TSAIDAFECHAMENTO.Post;
+frmvenda.bitbtn2.click;
+frmvenda.Tag := 1;
+dbmemo2.Clear ;
+Close;
+end;
+end;
+end;
+end;
+
+end.
