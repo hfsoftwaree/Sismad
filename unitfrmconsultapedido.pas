@@ -1,0 +1,425 @@
+unit unitfrmconsultapedido;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, EDBNum, DBCtrls, ExtCtrls, Buttons, DB,
+  IBCustomDataSet, IBTable, EDateEd, jpeg, Grids, DBGrids, SSSpin, Gauges,
+  EDBDate;
+
+type
+  Tfrmconsultapedido = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Bevel2: TBevel;
+    valor: TLabel;
+    Bevel1: TBevel;
+    BitBtn1: TBitBtn;
+    BitBtn3: TBitBtn;
+    Edit1: TEdit;
+    Image1: TImage;
+    DBGrid1: TDBGrid;
+    GroupBox1: TGroupBox;
+    nota: TSpinEditXP;
+    GroupBox3: TGroupBox;
+    Label2: TLabel;
+    lancamento: TLabel;
+    Label3: TLabel;
+    quantidade: TLabel;
+    Gauge2: TGauge;
+    Label5: TLabel;
+    nota1: TLabel;
+    ComboBox1: TComboBox;
+    GroupBox2: TGroupBox;
+    DBEdit1: TDBEdit;
+    cliente: TLabel;
+    GroupBox4: TGroupBox;
+    Label4: TLabel;
+    DBEdit2: TDBEdit;
+    GroupBox5: TGroupBox;
+    Label6: TLabel;
+    DBEdit3: TDBEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1TitleClick(Column: TColumn);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmconsultapedido: Tfrmconsultapedido;
+
+implementation
+
+uses UnitDM, UnitPrincipal, UnitCalculator, UnitPesquisa3,
+  unitconsultaentrega;
+
+{$R *.dfm}
+
+Function ConverteData(Data:String):String;
+begin
+    Result := Copy(Data,4,3) + Copy(Data,1,3) + Copy(Data,7,4);
+end;
+
+procedure Tfrmconsultapedido.BitBtn3Click(Sender: TObject);
+var total, total1, total2, total7 : Real;
+var val, c, a, i  : integer; S: string;
+begin
+   if nota.Text = '0' then
+      Begin
+          Application.MessageBox('Pedido deve ser informado!', 'Informação', mb_Ok + mb_IconInformation);
+          nota.SetFocus;
+      end;
+
+if  (nota.text <> '0') then
+begin
+//   DM.TSaida_Discriminacao.Filtered := False;
+//   DM.TSaida_Discriminacao.Close;
+   DM.TSaida_Discriminacao.Filter := 'NFNUMERO = ' + QuotedStr(nota.Text);
+   DM.TSaida_Discriminacao.Filtered := True;
+   DM.TSaida_Discriminacao.Open;
+
+//   DM.TSAIDAFECHAMENTO.Filtered := False;
+  // DM.TSAIDAFECHAMENTO.Close;
+   DM.TSAIDAFECHAMENTO.Filter := 'NF = ' + QuotedStr(nota.Text);
+   DM.TSAIDAFECHAMENTO.Filtered := True;
+   DM.TSAIDAFECHAMENTO.Open;
+
+//   dm.QCredor.Close;
+   dm.QCredor.Open;
+   DM.QCredor.Locate('CODIGOCREDOR',DBEdit1.text,[lopartialkey,locaseinsensitive]);
+   cliente.Caption := DM.QCredor['NOMECREDOR'];
+
+begin
+   if DM.TSaida_Discriminacao.RecordCount = 0 then
+   begin
+   lancamento.Caption := '0';
+   quantidade.Caption := '0.0000';
+   valor.Caption := '0.00';
+   nota1.Caption := '0.00';
+   cliente.Caption := '';
+   label7.Caption := '';
+   label10.Caption := '';
+   nota.SetFocus;
+   Application.MessageBox('Não consta lançamento para o pedido informado, Verifique!', 'Consulta', mb_Ok + mb_IconInformation);
+   end
+   else
+   begin
+   label7.Caption := DM.TSaida_Discriminacao['FECHAMENTOdescricao'];
+   if dm.TSAIDAFECHAMENTO['ENTREGASTATUS']=null then label10.Caption := '' else label10.Caption := DM.TSAIDAFECHAMENTO['ENTREGASTATUS'];
+   if combobox1.ItemIndex = 0 then
+   begin
+   DM.TSaida_Discriminacao.IndexFieldNames := 'ESSENCIA';
+   total := 0;
+   total1 := 0;
+   total2 := 0;
+   gauge2.Visible := true;
+   gauge2.MaxValue := 0;
+   Gauge2.MaxValue:= DM.TSaida_discriminacao.RecordCount;
+   DM.TSaida_discriminacao.First;
+   while not DM.TSaida_discriminacao.Eof do
+     begin
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total := DM.TSaida_discriminacao['TOTALM3'] + total ;
+        total1 := DM.TSaida_discriminacao['VALTOTAL'] + total1 ;
+        total2 := DM.TSaida_discriminacao['QUANTIDADE'] + total2 ;
+        DM.TSaida_discriminacao.Next;
+        end;
+        quantidade.caption := FormatCurr('#0.0000',total);
+        valor.caption := FormatCurr('#,0.00',total1);
+        lancamento.Caption := FormatCurr('', total2);
+        gauge2.Visible := false;
+        end;
+//        DM.TSAIDAFECHAMENTO.Filtered := False;
+  //      DM.TSAIDAFECHAMENTO.Close;
+        DM.TSAIDAFECHAMENTO.Filter := 'NF = ' + QuotedStr(nota.Text);
+        DM.TSAIDAFECHAMENTO.Filtered := True;
+        DM.TSAIDAFECHAMENTO.Open;
+
+        total7 := 0;
+        DM.TSAIDAFECHAMENTO.First;
+        while not DM.TSAIDAFECHAMENTO.Eof  do
+        begin
+        total7 := DM.TSAIDAFECHAMENTO['VAL_TOT_NOTA'] + total7;
+        DM.TSAIDAFECHAMENTO.Next;
+        end;
+        nota1.Caption := FormatCurr('#,0.00',total7);
+        label4.Caption := dbedit2.Text;
+        label6.Caption := dbedit3.Text;
+
+         //variavel para mudar automaticamente o numero do campo pedido
+//         S := nota.Text;
+  //       while Pos('', S) > 0 do
+    //           delete(s,Pos('', S),1);
+      //
+        // val := strtoint(trim(s));
+//         val := val + 1;
+  //       s := inttostr(val);
+    //     c := length(trim(s));
+
+      //   for a := 1 to c-1 do
+        //    Insert('',s,a*2);
+
+//         nota.Text := s;
+
+     end;
+
+   begin
+   if combobox1.ItemIndex = 1 then
+   begin
+   DM.TSaida_Discriminacao.IndexFieldNames := 'ESSENCIATIPO';
+   total := 0;
+   total1 := 0;
+   total2 := 0;
+   gauge2.Visible := true;
+   gauge2.MaxValue := 0;
+   Gauge2.MaxValue:= DM.TSaida_discriminacao.RecordCount;
+   DM.TSaida_discriminacao.First;
+   while not DM.TSaida_discriminacao.Eof do
+     begin
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total := DM.TSaida_discriminacao['TOTALM3'] + total ;
+        total1 := DM.TSaida_discriminacao['VALTOTAL'] + total1 ;
+        total2 := DM.TSaida_discriminacao['QUANTIDADE'] + total2 ;
+        DM.TSaida_discriminacao.Next;
+        end;
+        quantidade.caption := FormatCurr('#0.0000',total);
+        valor.caption := FormatCurr('#,0.00',total1);
+        lancamento.Caption := FormatCurr('', total2);
+        gauge2.Visible := false;
+        end;
+//        DM.TSAIDAFECHAMENTO.Filtered := False;
+  //      DM.TSAIDAFECHAMENTO.Close;
+        DM.TSAIDAFECHAMENTO.Filter := 'NF = ' + QuotedStr(nota.Text);
+        DM.TSAIDAFECHAMENTO.Filtered := True;
+        DM.TSAIDAFECHAMENTO.Open;
+
+        total7 := 0;
+        DM.TSAIDAFECHAMENTO.First;
+        while not DM.TSAIDAFECHAMENTO.Eof  do
+        begin
+        total7 := DM.TSAIDAFECHAMENTO['VAL_TOT_NOTA'] + total7;
+        DM.TSAIDAFECHAMENTO.Next;
+        end;
+        nota1.Caption := FormatCurr('#,0.00',total7);
+                label4.Caption := dbedit2.Text;
+        label6.Caption := dbedit3.Text;
+        nota.SetFocus;
+        end;
+begin
+if combobox1.ItemIndex = 2 then
+   begin
+   DM.TSaida_Discriminacao.IndexFieldNames := 'QUANTIDADE';
+   total := 0;
+   total1 := 0;
+   total2 := 0;
+   gauge2.Visible := true;
+   gauge2.MaxValue := 0;
+   Gauge2.MaxValue:= DM.TSaida_discriminacao.RecordCount;
+   DM.TSaida_discriminacao.First;
+   while not DM.TSaida_discriminacao.Eof do
+     begin
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total := DM.TSaida_discriminacao['TOTALM3'] + total ;
+        total1 := DM.TSaida_discriminacao['VALTOTAL'] + total1 ;
+        total2 := DM.TSaida_discriminacao['QUANTIDADE'] + total2 ;
+        DM.TSaida_discriminacao.Next;
+        end;
+        quantidade.caption := FormatCurr('#0.0000',total);
+        valor.caption := FormatCurr('#,0.00',total1);
+        lancamento.Caption := FormatCurr('', total2);
+        gauge2.Visible := false;
+        end;
+//        DM.TSAIDAFECHAMENTO.Filtered := False;
+  //      DM.TSAIDAFECHAMENTO.Close;
+        DM.TSAIDAFECHAMENTO.Filter := 'NF = ' + QuotedStr(nota.Text);
+        DM.TSAIDAFECHAMENTO.Filtered := True;
+        DM.TSAIDAFECHAMENTO.Open;
+
+        total7 := 0;
+        DM.TSAIDAFECHAMENTO.First;
+        while not DM.TSAIDAFECHAMENTO.Eof  do
+        begin
+        total7 := DM.TSAIDAFECHAMENTO['VAL_TOT_NOTA'] + total7;
+        DM.TSAIDAFECHAMENTO.Next;
+        end;
+        nota1.Caption := FormatCurr('#,0.00',total7);
+                label4.Caption := dbedit2.Text;
+        label6.Caption := dbedit3.Text;
+        nota.SetFocus;
+        end;
+
+begin
+if combobox1.ItemIndex = 3 then
+   begin
+   DM.TSaida_Discriminacao.IndexFieldNames := 'TOTALM3';
+   total := 0;
+   total1 := 0;
+   total2 := 0;
+   gauge2.Visible := true;
+   gauge2.MaxValue := 0;
+   Gauge2.MaxValue:= DM.TSaida_discriminacao.RecordCount;
+   DM.TSaida_discriminacao.First;
+   while not DM.TSaida_discriminacao.Eof do
+     begin
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total := DM.TSaida_discriminacao['TOTALM3'] + total ;
+        total1 := DM.TSaida_discriminacao['VALTOTAL'] + total1 ;
+        total2 := DM.TSaida_discriminacao['QUANTIDADE'] + total2 ;
+        DM.TSaida_discriminacao.Next;
+        end;
+        quantidade.caption := FormatCurr('#0.0000',total);
+        valor.caption := FormatCurr('#,0.00',total1);
+        lancamento.Caption := FormatCurr('', total2);
+        gauge2.Visible := false;
+        end;
+//        DM.TSAIDAFECHAMENTO.Filtered := False;
+  //      DM.TSAIDAFECHAMENTO.Close;
+        DM.TSAIDAFECHAMENTO.Filter := 'NF = ' + QuotedStr(nota.Text);
+        DM.TSAIDAFECHAMENTO.Filtered := True;
+        DM.TSAIDAFECHAMENTO.Open;
+
+        total7 := 0;
+        DM.TSAIDAFECHAMENTO.First;
+        while not DM.TSAIDAFECHAMENTO.Eof  do
+        begin
+        total7 := DM.TSAIDAFECHAMENTO['VAL_TOT_NOTA'] + total7;
+        DM.TSAIDAFECHAMENTO.Next;
+        end;
+        nota1.Caption := FormatCurr('#,0.00',total7);
+                label4.Caption := dbedit2.Text;
+        label6.Caption := dbedit3.Text;
+        nota.SetFocus;
+        end;
+
+begin
+if combobox1.ItemIndex = 4 then
+   begin
+   DM.TSaida_Discriminacao.IndexFieldNames := 'VALUNITARIO';
+   total := 0;
+   total1 := 0;
+   total2 := 0;
+   gauge2.Visible := true;
+   gauge2.MaxValue := 0;
+   Gauge2.MaxValue:= DM.TSaida_discriminacao.RecordCount;
+   DM.TSaida_discriminacao.First;
+   while not DM.TSaida_discriminacao.Eof do
+     begin
+        Gauge2.Progress:=Gauge2.Progress + 1;
+        total := DM.TSaida_discriminacao['TOTALM3'] + total ;
+        total1 := DM.TSaida_discriminacao['VALTOTAL'] + total1 ;
+        total2 := DM.TSaida_discriminacao['QUANTIDADE'] + total2 ;
+        DM.TSaida_discriminacao.Next;
+        end;
+        quantidade.caption := FormatCurr('#0.0000',total);
+        valor.caption := FormatCurr('#,0.00',total1);
+        lancamento.Caption := FormatCurr('', total2);
+        gauge2.Visible := false;
+        end;
+//        DM.TSAIDAFECHAMENTO.Filtered := False;
+  //      DM.TSAIDAFECHAMENTO.Close;
+        DM.TSAIDAFECHAMENTO.Filter := 'NF = ' + QuotedStr(nota.Text);
+        DM.TSAIDAFECHAMENTO.Filtered := True;
+        DM.TSAIDAFECHAMENTO.Open;
+
+        total7 := 0;
+        DM.TSAIDAFECHAMENTO.First;
+        while not DM.TSAIDAFECHAMENTO.Eof  do
+        begin
+        total7 := DM.TSAIDAFECHAMENTO['VAL_TOT_NOTA'] + total7;
+        DM.TSAIDAFECHAMENTO.Next;
+        end;
+        nota1.Caption := FormatCurr('#,0.00',total7);
+                label4.Caption := dbedit2.Text;
+        label6.Caption := dbedit3.Text;
+        nota.SetFocus;
+        end;
+end;
+end;
+end;
+
+procedure Tfrmconsultapedido.BitBtn1Click(Sender: TObject);
+begin
+cliente.Caption := '';
+nota.Text := '0';
+nota1.Caption := '';
+lancamento.Caption := '';
+quantidade.Caption := '';
+valor.Caption := '';
+Close;
+end;
+
+procedure Tfrmconsultapedido.FormShow(Sender: TObject);
+begin
+Self.Tag := 1;
+DM.TEssencia.Open;
+DM.TEssencia.IndexFieldNames  := 'ESSENCIA';
+end;
+
+procedure Tfrmconsultapedido.BitBtn4Click(Sender: TObject);
+begin
+Application.CreateForm(TfrmPesquisa3, frmPesquisa3);
+frmPesquisa3.ShowModal;
+FRMPESQUISA3.Free;
+end;
+
+procedure Tfrmconsultapedido.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+Self.Tag:= 0;
+end;
+
+procedure Tfrmconsultapedido.FormDestroy(Sender: TObject);
+begin
+DM.TSaida_Discriminacao.Filtered := False;
+DM.TSaida_Discriminacao.Close;
+DM.TSAIDAFECHAMENTO.Filtered := False;
+DM.TSAIDAFECHAMENTO.Close;
+DM.TEssencia.IndexFieldNames := '';
+DM.TEssencia.Close;
+dm.QCredor.Close;
+
+if frmconsultaentrega = nil then
+else
+if frmconsultaentrega.Tag = 1 then
+begin
+frmPrincipal.EvKeyNavigator1.Active := false;
+frmconsultaentrega.fornecedor.SetFocus;
+frmconsultaentrega.Tag := 0;
+end
+end;
+
+procedure Tfrmconsultapedido.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (Shift = [ssCtrl]) and (Key = 46) Then 
+KEY := 0; 
+
+end;
+
+procedure Tfrmconsultapedido.DBGrid1TitleClick(Column: TColumn);
+var
+  I: Integer;
+begin
+  for I := 0 to DBGrid1.Columns.Count - 1 do
+  DBGrid1.Columns[i].Title.Font.Style := [];
+  DM.TSaida_Discriminacao.IndexFieldNames := Column.FieldName;
+  Column.Title.Font.Style := [fsBold];
+
+end;
+
+end.

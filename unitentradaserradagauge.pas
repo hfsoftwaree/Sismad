@@ -1,0 +1,154 @@
+unit unitentradaserradagauge;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Gauges, ExtCtrls;
+
+type
+  Tfrmentradaserradagauge = class(TForm)
+    Timer1: TTimer;
+    Label2: TLabel;
+    Label1: TLabel;
+    Gauge2: TGauge;
+    procedure FormDestroy(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmentradaserradagauge: Tfrmentradaserradagauge;
+
+implementation
+
+uses UnitEntradaSerrada, UnitDM, UnitPesquisaEntrada, UnitPrincipal;
+
+{$R *.dfm}
+
+
+
+procedure Tfrmentradaserradagauge.FormDestroy(Sender: TObject);
+begin
+If Application.MessageBox('Continua lançamento para outro Fornecedor?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+frmentradaserrada.BitBtn4.Enabled := false;
+Application.CreateForm(TfrmPesquisa, frmPesquisa);
+frmPesquisa.ShowModal;
+frmpesquisa.Free;
+end
+else
+//frmentradaserrada.nota.Text := '0';
+frmentradaserrada.DBGrid2.SetFocus;
+frmentradaserrada.BitBtn4.Enabled := true;
+frmentradaserrada.BitBtn10.Enabled := true;
+frmentradaserrada.BitBtn11.Enabled := true;
+end;
+
+procedure Tfrmentradaserradagauge.Timer1Timer(Sender: TObject);
+var total, total1,total2,total3,total4: Real;
+begin
+timer1.Enabled := false;
+begin
+   total1 := 0;
+   total := 0;
+   total2 := 0;
+   total3 := 0;
+   total4 :=0;
+
+        gauge2.MaxValue := 0;
+        Gauge2.MaxValue:= DM.TESDISCRIMINACAO.RecordCount;
+        DM.TESDISCRIMINACAO.last;
+   DM.TESDISCRIMINACAO.First;
+   if not DM.TESDISCRIMINACAO.Eof then
+     repeat
+        Gauge2.Progress:=Gauge2.Progress + 1;
+
+          if DM.TESDISCRIMINACAO['TOTALM3']=null then
+          begin
+          DM.TESDISCRIMINACAO.Edit;
+          DM.TESDISCRIMINACAO['TOTALM3']:= 0;
+          DM.TESDISCRIMINACAO.Post;
+          end
+          else
+          begin
+          total1 := DM.TESDISCRIMINACAO['TOTALM3'] + total1 ;
+          end;
+
+          if DM.TESDISCRIMINACAO['QUANTIDADE']=null then
+          begin
+          DM.TESDISCRIMINACAO.Edit;
+          DM.TESDISCRIMINACAO['QUANTIDADE']:=0;
+          DM.TESDISCRIMINACAO.Post;
+          end
+          else
+          begin
+          total := DM.TESDISCRIMINACAO['QUANTIDADE'] + total ;
+          end;
+
+          if DM.TESDISCRIMINACAO['VALTOTAL']=null then
+          begin
+          DM.TESDISCRIMINACAO.Edit;
+          DM.TESDISCRIMINACAO['VALTOTAL']:=0;
+          DM.TESDISCRIMINACAO.Post;
+          end
+          else
+          begin
+          total2 := DM.TESDISCRIMINACAO['VALTOTAL'] + total2 ;
+          end;
+
+          if DM.TESDISCRIMINACAO['QTDEM2']=null then
+          begin
+          DM.TESDISCRIMINACAO.Edit;
+          DM.TESDISCRIMINACAO['QTDEM2']:=0;
+          DM.TESDISCRIMINACAO.Post;
+          end
+          else
+          begin
+          total3 := DM.TESDISCRIMINACAO['QTDEM2'] + total3 ;
+          end;
+
+          if DM.TESDISCRIMINACAO['QTDEML']=null then
+          begin
+          DM.TESDISCRIMINACAO.Edit;
+          DM.TESDISCRIMINACAO['QTDEML']:=0;
+          DM.TESDISCRIMINACAO.Post;
+          end
+          else
+          begin
+          total4 := DM.TESDISCRIMINACAO['QTDEML'] + total4 ;
+          end;
+
+        DM.TESDISCRIMINACAO.Next;
+        until DM.TESDISCRIMINACAO.Eof;
+     end;
+    frmEntradaSerrada.M2.caption := FormatCurr('#0.00',total3);
+    frmEntradaSerrada.ML.caption := FormatCurr('#0.00',total4);
+    frmEntradaSerrada.quantidade.caption := FormatCurr('#0.0000',total1);
+    frmEntradaSerrada.pecas.caption := FormatCurr('#0',total);
+    frmentradaSerrada.TOTNOTA.Text := FormatCurr('#,0.00',total2);
+
+   frmEntradaSerrada.DBGrid3.Visible := False;
+   frmEntradaSerrada.DBGrid2.Visible := True;
+   frmEntradaSerrada.g.Caption := 'Produtos > ' + intTostr(DM.TESDISCRIMINACAO.RecordCount);
+   SELF.Close;
+end;
+
+
+procedure Tfrmentradaserradagauge.FormShow(Sender: TObject);
+begin
+   label2.Caption := frmentradaserrada.nota.Text;
+end;
+
+procedure Tfrmentradaserradagauge.FormClick(Sender: TObject);
+begin
+close;
+end;
+
+end.

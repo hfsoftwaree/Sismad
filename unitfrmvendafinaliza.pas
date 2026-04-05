@@ -1,0 +1,174 @@
+unit unitfrmvendafinaliza;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, Mask, EDateEd, ToolEdit, IBQuery,
+  DB, IBCustomDataSet, IBTable, DBCtrls;
+
+type
+  Tfrmvendafinaliza = class(TForm)
+    Panel1: TPanel;
+    GroupBox1: TGroupBox;
+    DataInicial1: TEvDateEdit;
+    Bevel1: TBevel;
+    Panel2: TPanel;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    Label1: TLabel;
+    DataInicial: TEdit;
+    GroupBox2: TGroupBox;
+    ESSENCIATIPO: TDBLookupComboBox;
+    DBEdit1: TDBEdit;
+    Label2: TLabel;
+    DataSource1: TDataSource;
+    Query1: TIBQuery;
+    DataSource2: TDataSource;
+    table1: TIBTable;
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DataInicial1Change(Sender: TObject);
+    procedure DataInicial1Enter(Sender: TObject);
+    procedure ESSENCIATIPOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ESSENCIATIPOKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmvendafinaliza: Tfrmvendafinaliza;
+
+implementation
+
+uses UnitDM, UnitRepEntrada, UnitRepEntrada1, UnitVenda;
+
+{$R *.dfm}
+Function ConverteData(Data:String):String;
+begin
+    Result := Copy(Data,4,3) + Copy(Data,1,3) + Copy(Data,7,4);
+end;
+
+procedure Tfrmvendafinaliza.BitBtn3Click(Sender: TObject);
+begin
+DataInicial1.Text := '';
+query1.Close ;
+table1.Close;
+table1.Filtered:=false;
+Close;
+end;
+
+procedure Tfrmvendafinaliza.BitBtn2Click(Sender: TObject);
+begin
+If Application.MessageBox('Confirma Fechamento da Venda?', 'Confirmação',
+mb_YesNo + mb_ICONQUESTION) = idYes then
+begin
+    table1['ENTREGACODIGO'] := dbedit1.Text ;
+    table1['ENTREGADATA'] := datainicial1.Text;
+    table1.Post;
+    query1.Close ;
+    table1.Close;
+    table1.Filtered:=false;
+    dm.TSAIDAFECHAMENTO.refresh;
+
+
+   DM.TSaida_Discriminacao.First;
+   dm.TSaida_Discriminacao.Edit;
+   while not DM.TSaida_Discriminacao.Eof do
+     begin
+        dm.TSaida_Discriminacao['FECHAMENTOTIPO'] := '2';
+        dm.TSaida_Discriminacao['FECHAMENTODESCRICAO'] := 'Venda Finalizada';
+        dm.TSaida_Discriminacao['TIPOCODIGO'] := '1';
+        dm.TSaida_Discriminacao['TIPOLANCAMENTO'] := 'Venda';
+        DM.TSaida_Discriminacao['DATALANCAMENTO']:= frmvenda.data.Text ;
+        DM.TSaida_Discriminacao.Next;
+        dm.TSaida_Discriminacao.Edit;
+     end;
+     dm.TSaida_Discriminacao.Post;
+   if DM.TSaida_Discriminacao['TIPOCODIGO'] = null then frmvenda.DBEDIT7.Text  := '' else frmvenda.dbedit7.Text := DM.TSaida_Discriminacao['TIPOCODIGO'];
+   if DM.TSaida_Discriminacao['TIPOLANCAMENTO'] = null then frmvenda.EDIT5.Text  := '' else   frmvenda.edit5.Text := DM.TSaida_Discriminacao['TIPOLANCAMENTO'];
+
+    DM.TSAIDAFECHAMENTO.Edit;
+    DM.TSAIDAFECHAMENTO['FECHAMENTOTIPO'] := '2';
+    DM.TSAIDAFECHAMENTO['FECHAMENTODESCRICAO'] := 'Venda Finalizada';
+    DM.TSAIDAFECHAMENTO['TIPOCODIGO'] := '1';
+    DM.TSAIDAFECHAMENTO['TIPOLANCAMENTO'] := 'Venda';
+    DM.TSAIDAFECHAMENTO['DATA']:= datainicial1.text;
+    dm.TSAIDAFECHAMENTO.Post;
+//    dm.TSAIDAFECHAMENTO.refresh;
+
+    DM.TSTATUS1.open;
+    DM.TSTATUS1.Edit;
+    DM.TSTATUS1['CODIGOSTATUS'] := '2';
+    DM.TSTATUS1['STATUS'] := 'Venda Finalizada';
+    dm.TSTATUS1.Post;
+    frmvenda.status1.Caption :=DM.TSTATUS1['STATUS'];
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn12.Enabled := false else frmvenda.bitbtn12.Enabled := true;
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn13.Enabled := false else frmvenda.bitbtn13.Enabled := true;   
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn9.Enabled := false else frmvenda.bitbtn9.Enabled := true;
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn1.Enabled := false else frmvenda.bitbtn1.Enabled := true;
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn39.Enabled := false else frmvenda.bitbtn39.Enabled := true;   
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn5.Enabled := false else frmvenda.bitbtn5.Enabled := true;
+   if DM.TSTATUS1['CODIGOSTATUS'] = 2 then frmvenda.bitbtn8.Enabled := true else frmvenda.bitbtn8.Enabled := false;
+   frmvenda.tipolancamento.ItemIndex  := DM.TSaida_Discriminacao['TIPOCODIGO'];
+    frmvenda.bitbtn14.Enabled := false;
+    if frmvenda.status1.Caption = 'Venda Finalizada' then
+    begin
+    frmvenda.status1.Font.Color := clRed;
+    frmvenda.label28.Font.Color := clRed;
+    end
+    else
+    begin
+    frmvenda.status1.Font.Color := clgreen;
+    frmvenda.label28.Font.Color := clgreen;
+    end;
+    self.Close;
+end;
+end;
+
+
+procedure Tfrmvendafinaliza.FormShow(Sender: TObject);
+begin
+DataInicial1.SetFocus;
+table1.Close;
+table1.Filtered:=false;
+table1.Filter :=  'NF = ' + QuotedStr(frmvenda.nota.Text)+ 'and CODIGOCLIENTE= ' + QuotedStr(frmvenda.DBEdit6.Text);
+table1.Filtered:=True;
+table1.Open;
+table1.edit;
+
+query1.Open;
+query1.Last;
+if TABLE1['ENTREGASTATUS']=null then TABLE1['ENTREGASTATUS'] := 'A SEPARAR';
+//essenciatipo.KeyValue := 'A SEPARAR';
+end;
+
+procedure Tfrmvendafinaliza.DataInicial1Change(Sender: TObject);
+begin
+DataInicial.Text := ConverteData(DataInicial1.Text);
+end;
+
+procedure Tfrmvendafinaliza.DataInicial1Enter(Sender: TObject);
+begin
+Datainicial1.Text := DateToStr(now);
+end;
+
+procedure Tfrmvendafinaliza.ESSENCIATIPOKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+if key = VK_SPACE then
+essenciatipo.DropDown;
+end;
+
+procedure Tfrmvendafinaliza.ESSENCIATIPOKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if key = #13 then
+   bitBtn2.Click;
+end;
+
+end.
