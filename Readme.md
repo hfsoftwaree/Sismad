@@ -1,4 +1,4 @@
-## SISCOMAD
+## SISMAD
 **Status:** Sistema passando por refatoração<br>
 **Tecnologia:** Delphi 7 + Firebird<br>
 **Migração prevista:** 
